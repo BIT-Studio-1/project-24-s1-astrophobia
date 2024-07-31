@@ -7,6 +7,8 @@ namespace AstrophobiaFirst
 {
     internal class Program
     {
+        public delegate void RoomMethod(); //Allows player to return the the room they were in before opening the menu.
+
         public bool
                 Comms = false,
                 Thrusters = false,
@@ -113,10 +115,11 @@ namespace AstrophobiaFirst
                     }
             }
         }
-        public static void Inventory()
+        public static void Inventory(RoomMethod previousRoom)
         {
             Console.WriteLine("Items are stored here");
             //We have yet to use this, maybe a menu function that displays items?
+            previousRoom();
         }
         static void IGmenu(ref bool torch, string currentRoom, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
         {
@@ -248,9 +251,7 @@ namespace AstrophobiaFirst
                         }
                     case "INVENTORY":
                         {
-                            Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                            Console.ReadLine();
-                            Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore, power);
+                            Inventory(Dorm);
                             break;
                         }
                 }
@@ -280,9 +281,7 @@ namespace AstrophobiaFirst
                         }
                     case "INVENTORY":
                         {
-                            Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                            Console.ReadLine();
-                            Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            Inventory(Dorm);
                             break;
                         }
                 }
@@ -376,9 +375,7 @@ namespace AstrophobiaFirst
                         }
                     case "INVENTORY":
                         {
-                            Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                            Console.ReadLine();
-                            Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore, power);
+                            Inventory(Hall);
                             break;
                         }
                 }
@@ -431,7 +428,7 @@ namespace AstrophobiaFirst
                 case "STATS":
                     {
                         ShipStats(ref oxygenLevel, reactorCore);
-                        ShipSystems();
+                        //ShipSystems();
                         Bridge(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
                         break;
                     }
@@ -547,7 +544,7 @@ namespace AstrophobiaFirst
                     ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
                     break;
                 case "2":
-                    ShipSystems();
+                    //ShipSystems();
                     ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
                     break;
                 case "3":
