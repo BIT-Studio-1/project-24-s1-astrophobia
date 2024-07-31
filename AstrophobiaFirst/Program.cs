@@ -28,72 +28,61 @@ namespace AstrophobiaFirst
             Console.Clear();
             Console.WriteLine("   __    ___  ____  ____  _____  ____  _   _  _____  ____  ____    __   \r\n  /__\\  / __)(_  _)(  _ \\(  _  )(  _ \\( )_( )(  _  )(  _ \\(_  _)  /__\\  \r\n /(__)\\ \\__ \\  )(   )   / )(_)(  )___/ ) _ (  )(_)(  ) _ < _)(_  /(__)\\ \r\n(__)(__)(___/ (__) (_)\\_)(_____)(__)  (_) (_)(_____)(____/(____)(__)(__)\n");
             Console.WriteLine("        ~+                                    \r\n                                              \r\n                 *       +               .'.  \r\n           '                  |          |o|  \r\n       ()    .-.,=\"``\"=.    - o -       .'o'. \r\n             '=/_       \\     |         |.-.| \r\n          *   |  '=._    |              '   ' \r\n               \\     `=./`,        '     ( )  \r\n            .   '=.__.=' `='      *       )   \r\n   +                         +           ( )  \r\n        O      *        '       .             \n");
-            Console.WriteLine("1    Play");
-            Console.WriteLine("2    Help");
-            Console.WriteLine("3    Options");
-            Console.WriteLine("4    Exit");
+            Console.WriteLine("\n1    Play" +
+                              "\n2    Help" +
+                              "\n3    Options" +
+                              "\n4    Exit\n");
 
-            string temp = Console.ReadLine();
-            temp = temp.ToUpper();
-            switch (temp)
+            int userInput = ValidateUserInput(4);            
+
+            switch (userInput)
             {
-                case "PLAY":
-                case "Play":
-                case "play":
-                case "1":
-                    Console.Clear();
+                case 1:
                     Intro();
                     break;
-                case "2":
-                case "HELP":
-                case "Help":
-                case "help":
+                case 2:
                     Help();
                     break;
-                case "4":
-                case "EXIT":
-                case "Exit":
-                case "exit":
+                case 3:
+                    //Options();
+                    break;
+                case 4:
                     GameEnd();
                     break;
             }
+
+
         }
         static void Help()
         {
-            string playerChoice;
             Console.Clear();
             Console.WriteLine("This is the help section, where everything you may need as you play through this game. Below you will find the Help options, which goes into specifics about the specified topic.");
-            Console.WriteLine("\n1    Commands\n2    Purpose");
+            Console.WriteLine("\n1    Commands" +
+                              "\n2    Purpose\n");
             Console.WriteLine("\nHit Enter to Go back to the Main Menu");
-            playerChoice = Console.ReadLine();
-            playerChoice = playerChoice.ToUpper();
 
-            switch (playerChoice)
+            int userInput;
+            userInput = ValidateUserInput(2);
+
+            //Options are Commands, Purpose
+            switch (userInput)
             {
-                case "1":
-                case "COMMANDS":
-                case "Commands":
-                case "commands":
-                    {
-                        Console.Clear();
-                        Console.WriteLine("This page will specify globally used commands within the game:");
-                        Console.WriteLine("\nlook: This command is used to look around the room you are currently in, to help you with your surroundings, \nit may also show any items found in said room.");
-                        Console.WriteLine("\nleave: Used to leave the current room you are in, assuming said room is linked to the hallway.");
-                        Console.WriteLine("\nTo pick up any items that can be found in the room you are currently in, you will likely answer in yes or no. \nYou will also have to write which slot the item fills.");
-                        Console.WriteLine("\nmenu: this command will bring up up the ingame menu, and with it, a few more options for the player, \nsuch as restarting exiting the game, going to the main menu etc...");
-                        Console.WriteLine("\nUse a rooms name while in the hallway to go to the room you have typed (e.g. typing dorm goes to the Dorm room).");
-                        Console.WriteLine("\ninventory: This is used to access your inventory and see what slots are free and full.");
-                        Console.WriteLine("\nskip: This is used to skip any story if you don't want to read or you have already read.");
-                        Console.WriteLine("\nship stats: This allows you to access oxygen levels and see what parts of the ship or damaged, enabled or disabled.");
-                        Console.WriteLine("\nHit Enter to go back to the Help Options page.");
-                        Console.ReadLine();
-                        Help();
-                        break;
-                    }
-                case "2":
-                case "PURPOSE":
-                case "Purpose":
-                case "purpose":
+                case 1:
+                    Console.Clear();
+                    Console.WriteLine("This page will specify globally used commands within the game:");
+                    Console.WriteLine("\nlook: This command is used to look around the room you are currently in, to help you with your surroundings, \nit may also show any items found in said room.");
+                    Console.WriteLine("\nleave: Used to leave the current room you are in, assuming said room is linked to the hallway.");
+                    Console.WriteLine("\nTo pick up any items that can be found in the room you are currently in, you will likely answer in yes or no. \nYou will also have to write which slot the item fills.");
+                    Console.WriteLine("\nmenu: this command will bring up up the ingame menu, and with it, a few more options for the player, \nsuch as restarting exiting the game, going to the main menu etc...");
+                    Console.WriteLine("\nUse a rooms name while in the hallway to go to the room you have typed (e.g. typing dorm goes to the Dorm room).");
+                    Console.WriteLine("\ninventory: This is used to access your inventory and see what slots are free and full.");
+                    Console.WriteLine("\nskip: This is used to skip any story if you don't want to read or you have already read.");
+                    Console.WriteLine("\nship stats: This allows you to access oxygen levels and see what parts of the ship or damaged, enabled or disabled.");
+                    Console.WriteLine("\nHit Enter to go back to the Help Options page.");
+                    Console.ReadLine();
+                    Help();
+                    break;
+                case 2:
                     Console.Clear();
                     Console.WriteLine("This page will outline the story/purpose of this game.");
                     Console.WriteLine("\nThe purpose of this game is to escape from this ship that you have woken up on. You have no memory or why you \nare here or how you got here.");
@@ -106,11 +95,9 @@ namespace AstrophobiaFirst
                     Help();
                     break;
                 default:
-                    {
-                        Console.Clear();
-                        Mainmenu();
-                        break;
-                    }
+                    Console.Clear();
+                    Mainmenu();
+                    break;
             }
         }
         public static void Inventory()
@@ -126,15 +113,15 @@ namespace AstrophobiaFirst
             Console.WriteLine("*\t\t  <Press>\t\t *");
             Console.WriteLine("* (1) To Resume   \t\t\t *\n* (2) If you wish to Restart\t\t *\n* (3) To go to the Main Menu\t\t *\n* (4) If you would like to Exit the game *");
             Console.WriteLine(Border);
-            string Input = Console.ReadLine();
-            Console.WriteLine();
 
-            switch (Input)
+            int userInput;
+            userInput = ValidateUserInput(4);
+            switch (userInput)
             {
-                case "1":
+                case 1: //Resume
                     if (currentRoom == "Dorm")
                     {
-                        Dorm(   );
+                        Dorm();
                     }
                     if (currentRoom == "Hall")
                     {
@@ -145,15 +132,13 @@ namespace AstrophobiaFirst
                         Bridge();
                     }
                     break;
-                case "2":
-                    {
-                        Intro();
-                        break;
-                    }
-                case "3":
+                case 2: //Restart
+                    Intro();
+                    break;
+                case 3: //Main Menu
                     Mainmenu();
                     break;
-                case "4":
+                case 4: //Exit
                     GameEnd();
                     break;
             }
@@ -165,9 +150,11 @@ namespace AstrophobiaFirst
             
             string playerChoice;
 
+            Console.Clear();
             Console.WriteLine("There is a little bit of story, type skip if you wish to skip it, otherwise just hit enter to begin...");
             playerChoice = Console.ReadLine();
             playerChoice = playerChoice.ToUpper();
+
             switch (playerChoice)
             {
                 case "SKIP":
@@ -189,106 +176,103 @@ namespace AstrophobiaFirst
 
             }
         }
+
         //below are all the rooms
         public static void Dorm()
         {
-            string temp = null;
+            int userInput;
             string currentRoom = "Dorm";
 
             if (currentRoom == "Dorm" && torch == false && dormRoomCount == 0)
             {
-                Console.WriteLine("You awaken in the dorm and it is dark. Maybe there is something in the room to help you see better.\nWhat would you like to do, your options are:\nLook\nLeave\nMenu\n");
-                temp = Console.ReadLine();
-                temp = temp.ToUpper();
-            }
-            else { }
+                Console.WriteLine("You awaken in the dorm and it is dark. Maybe there is something in the room to help you see better." +
+                    "\nWhat would you like to do, your options are:");
+                Console.WriteLine("\n1    Look" +
+                                  "\n2    Leave" +
+                                  "\n3    Menu" +
+                                  "\n4    Inventory");
 
-            switch (temp)
-            {
-                case "LOOK":
-                    {
+                userInput = ValidateUserInput(4);
+                switch (userInput)
+                {
+                    case 1: //Look
                         LookDorm();
                         break;
-                    }
-                case "LEAVE":
-                    {
+                    case 2: //Leave
                         if (currentRoom == "Dorm" && torch == false)
                         {
                             Console.WriteLine("You cannot see, so you stumble around for a little bit. Making no progress, you may want to see if you can find something to light the way.");
                             Dorm();
                         }
                         break;
-                    }
-                case "MENU":
-                    {
+                    case 3: //Menu
                         IGmenu(ref currentRoom);
                         break;
-                    }
-            }
-            if (currentRoom == "Dorm" && torch == true && dormRoomCount == 0)
-            {
-                Console.WriteLine("You can now see around the room. \nThere are many beds but you seem to be the only one here. \nAre you alone ? \nMaybe you will find answers if you explore outside of the room, \nthrough the door in front of you that seems to lead to a hallway... \nLook\nLeave\nMenu\nInventory\n");
-                temp = Console.ReadLine();
-                temp = temp.ToUpper();
-                switch (temp)
-                {
-                    case "LOOK":
-                        {
-                            LookDorm();
-                            break;
-                        }
-                    case "LEAVE":
-                        dormRoomCount++;
-                        Hall();
+                    case 4: //Inventory
+                        Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
+                        Console.ReadLine();
+                        Dorm();
                         break;
-                    case "MENU":
-                        {
-                            IGmenu(ref currentRoom);
-                            break;
-                        }
-                    case "INVENTORY":
-                        {
-                            Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                            Console.ReadLine();
-                            Dorm();
-                            break;
-                        }
-                }
-            }
-            else if (currentRoom == "Dorm" && torch == true && dormRoomCount >= 2)
-            {
-                Console.WriteLine("\nYou are in the Dorm \nLook\nLeave\nMenu\n");
-                temp = Console.ReadLine();
-                temp = temp.ToUpper();
-                switch (temp)
-                {
-                    case "LOOK":
-                        {
-                            LookDorm();
-                            break;
-                        }
-                    case "LEAVE":
-                        {
-                            dormRoomCount++;
-                            Hall();
-                            break;
-                        }
-                    case "MENU":
-                        {
-                            IGmenu(ref currentRoom);
-                            break;
-                        }
-                    case "INVENTORY":
-                        {
-                            Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                            Console.ReadLine();
-                            Dorm();
-                            break;
-                        }
                 }
             }
             
-            else { }
+            if (currentRoom == "Dorm" && torch == true && dormRoomCount == 0)
+            {
+                Console.WriteLine("You can now see around the room. \nThere are many beds but you seem to be the only one here. \nAre you alone ? \nMaybe you will find answers if you explore outside of the room, \nthrough the door in front of you that seems to lead to a hallway... ");
+                Console.WriteLine("\n1    Look" +
+                                  "\n2    Leave" +
+                                  "\n3    Menu" +
+                                  "\n4    Inventory\n");
+                
+                userInput = ValidateUserInput(4);
+                switch (userInput)
+                {
+                    case 1: //Look
+                        LookDorm();
+                        break;
+                    case 2: //Leave
+                        dormRoomCount++;
+                        Hall();
+                        break;
+                    case 3: //Menu
+                        IGmenu(ref currentRoom);
+                        break;
+                    case 4: //Inventory
+                        Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
+                        Console.ReadLine();
+                        Dorm();
+                        break;
+                }
+            }
+
+            if (currentRoom == "Dorm" && torch == true && dormRoomCount >= 2)
+            {
+                Console.WriteLine("\nYou are in the Dorm");
+                Console.WriteLine("\n1    Look" +
+                                  "\n2    Leave" +
+                                  "\n3    Menu" +
+                                  "\n4    Inventory\n");
+
+                userInput = ValidateUserInput(4);
+                switch (userInput)
+                {
+                    case 1: //Look
+                        LookDorm();
+                        break;
+                    case 2: //Leave
+                        dormRoomCount++;
+                        Hall();
+                        break;
+                    case 3: //Menu
+                        IGmenu(ref currentRoom);
+                        break;
+                    case 4: //Inventory
+                        Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
+                        Console.ReadLine();
+                        Dorm();
+                        break;
+                }
+            }
         }
         static void Hall()
         {
@@ -297,7 +281,15 @@ namespace AstrophobiaFirst
             int count = 0;
 
             oxygenLevel = oxygenLevel - 25;
-            Console.WriteLine("\nYou are in the hallway, most of the rooms are shut except for the dorm and the bridge down the end of the hallway. You could go in there or you could go back into the dorm.\nYour options are:\nLook\nEnter one of the following rooms:\n-----\nDorm\nBridge\nMed\nStorage\nAirLock\n-----\nMenu\nInventory\n");
+            Console.WriteLine("\nYou are in the hallway, most of the rooms are shut except for the dorm and the bridge down the end of the hallway. You could go in there or you could go back into the dorm.\nYour options are:");
+            Console.WriteLine("\n1    Look" +
+                              "\n2    Enter Dorm" +
+                              "\n3    Enter Bridge" +
+                              "\n4    Enter Med" +
+                              "\n5    Enter Storage" +
+                              "\n6    Enter AirLock" +
+                              "\n7    Menu" +
+                              "\n8    Inventory\n");
             temp = Console.ReadLine();
             temp = temp.ToUpper();
             playerChoice = temp;
@@ -996,6 +988,31 @@ namespace AstrophobiaFirst
             Console.WriteLine("Thank you for playing, Goodbye!");
             Thread.Sleep(1000);
             Environment.Exit(0);
+        }
+
+        private static int ValidateUserInput(int numOptions)
+        {
+            bool isValidInput = false;
+            int userInput = 0;
+
+            while (!isValidInput)
+            {
+                string input = Console.ReadLine();
+
+                if (int.TryParse(input, out userInput))
+                {
+                    if (userInput > 0 && userInput <= numOptions)
+                    {
+                        isValidInput = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You must choose a valid option");
+                    }
+                }
+            }
+
+            return userInput;
         }
     } 
 } 
