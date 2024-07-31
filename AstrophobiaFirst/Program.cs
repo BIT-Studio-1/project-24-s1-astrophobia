@@ -7,15 +7,15 @@ namespace AstrophobiaFirst
 {
     internal class Program
     {
-        public bool
+        public static bool
                 // Testing new branch/////////////////////////////////////
-                Comms = false,
+                Comms = true,
                 Thrusters = false,
                 Reactor = false,
                 ShipAi = false;
         static void Main(string[] args)
         {
-            
+            ShipSystems();
             int oxygenLevel = 999;
             int reactorCore = 150;
             bool power = false;
@@ -603,7 +603,7 @@ namespace AstrophobiaFirst
 
         }
         // ShipSystems status window
-        static void ShipSystems(ref bool Comms, ref bool Thrusters, bool Reactor, bool ShipAi)
+        static void ShipSystems()
         {
             string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
 
