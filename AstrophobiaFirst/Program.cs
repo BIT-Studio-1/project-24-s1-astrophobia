@@ -8,6 +8,7 @@ namespace AstrophobiaFirst
     internal class Program
     {
         public bool
+                // Testing new branch/////////////////////////////////////
                 Comms = false,
                 Thrusters = false,
                 Reactor = false,
