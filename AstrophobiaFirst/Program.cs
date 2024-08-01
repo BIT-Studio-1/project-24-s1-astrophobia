@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.Design;
 using System.Security.Cryptography.X509Certificates;
+using System.Globalization;
 
 namespace AstrophobiaFirst
 {
@@ -119,6 +120,45 @@ namespace AstrophobiaFirst
                     }
             }
         }
+        public static void DisplayMap(string position)
+        {
+            // Define the map layout as a list of strings
+            string[] mapLines = new string[]
+            {
+        "          MMM      ",
+        "         |___|       ",
+        "     __MMMMMMMMM__    ",
+        "    [   |______|  ]   ",
+        "   [    |Bridge|   ]  ",
+        "  [     |      |    ] ",
+        "  |-----------------| ",
+        "  |       | | Dorm  | ",
+        "  |       | |   X   | ", // X will be replaced
+        "  |_______| |_______| ",
+        "  |       | |       | ",
+        "  |Storage| |  Med  | ",
+        "  |_______|_|_______| ", //change
+        "  |    |       |    | ",
+        "  |    |AirLock|    | ",
+        "  |    |       |    | ",
+        "  |    |-------|    | ",
+        "  A    |       |    A ",
+        " A|||||||||||||||||||A ",
+        "|||A|A|A|||A|||A|A|A||| ",
+        "A||A|A|A|||A|||A|A|A||A "
+            };
+
+            // Iterate through the mapLines and replace 'X' with the current position
+            for (int i = 0; i < mapLines.Length; i++)
+            {
+                if (mapLines[i].Contains("X"))
+                {
+                    mapLines[i] = mapLines[i].Replace("X", position);
+                }
+                Console.WriteLine(mapLines[i]);
+            }
+        }
+
         public static void Inventory()
         {
             Console.WriteLine("Items are stored here");
@@ -245,35 +285,7 @@ namespace AstrophobiaFirst
                     }
                 case "MAP":
                     {
-                        Console.WriteLine("'X' Shows your position ");
-                        Console.WriteLine(); Console.WriteLine();
-                        Console.WriteLine("           M      ");
-                        Console.WriteLine("          MMM      ");
-                        Console.WriteLine("         |___|       ");
-                        Console.WriteLine("     __MMMMMMMMM__    ");
-                        Console.WriteLine("    [   |______|  ]   ");
-                        Console.WriteLine("   [    |Bridge|   ]  ");
-                        Console.WriteLine("  [     |      |    ] ");
-                        Console.WriteLine("  |-----------------| ");
-                        Console.WriteLine("  |       | | Dorm  | ");
-                        Console.WriteLine("  |       | |   X   | ");
-                        Console.WriteLine("  |_______| |_______| ");
-                        Console.WriteLine("  |       | |       | ");
-                        Console.WriteLine("  |Storage| |  Med  | ");
-                        Console.WriteLine("  |_______|_|_______| ");
-                        Console.WriteLine("  |    |       |    | ");
-                        Console.WriteLine("  |    |AirLock|    | ");
-                        Console.WriteLine("  |    |       |    | ");
-                        Console.WriteLine("  |    |-------|    | ");
-                        Console.WriteLine("  A    |       |    A ");
-                        Console.WriteLine(" A|||||||||||||||||||A ");
-                        Console.WriteLine("|||A|A|A|||A|||A|A|A||| ");
-                        Console.WriteLine("A||A|A|A|||A|||A|A|A||A ");
-                        Console.WriteLine();
-                        Console.WriteLine("Press any key to put away map");
-                        Console.ReadLine();
-                        Dorm();
-                        break;
+                    
                     }
             }
             if (currentRoom == "Dorm" && torch == true && dormRoomCount == 0)
@@ -307,35 +319,7 @@ namespace AstrophobiaFirst
                         }
                     case "MAP":
                         {
-                            Console.WriteLine("'X' Shows your position ");
-                            Console.WriteLine(); Console.WriteLine();
-                            Console.WriteLine("           M      ");
-                            Console.WriteLine("          MMM      ");
-                            Console.WriteLine("         |___|       ");
-                            Console.WriteLine("     __MMMMMMMMM__    ");
-                            Console.WriteLine("    [   |______|  ]   ");
-                            Console.WriteLine("   [    |Bridge|   ]  ");
-                            Console.WriteLine("  [     |      |    ] ");
-                            Console.WriteLine("  |-----------------| ");
-                            Console.WriteLine("  |       | | Dorm  | ");
-                            Console.WriteLine("  |       | |   X   | ");
-                            Console.WriteLine("  |_______| |_______| ");
-                            Console.WriteLine("  |       | |       | ");
-                            Console.WriteLine("  |Storage| |  Med  | ");
-                            Console.WriteLine("  |_______|_|_______| ");
-                            Console.WriteLine("  |    |       |    | ");
-                            Console.WriteLine("  |    |AirLock|    | ");
-                            Console.WriteLine("  |    |       |    | ");
-                            Console.WriteLine("  |    |-------|    | ");
-                            Console.WriteLine("  A    |       |    A ");
-                            Console.WriteLine(" A|||||||||||||||||||A ");
-                            Console.WriteLine("|||A|A|A|||A|||A|A|A||| ");
-                            Console.WriteLine("A||A|A|A|||A|||A|A|A||A ");
-                            Console.WriteLine();
-                            Console.WriteLine("Press any key to put away map");
-                            Console.ReadLine();
-                            Dorm();
-                            break;
+                     
                         }
                 }
             }
@@ -372,35 +356,7 @@ namespace AstrophobiaFirst
                         }
                     case "MAP":
                         {
-                            Console.WriteLine("'X' Shows your position ");
-                            Console.WriteLine(); Console.WriteLine();
-                            Console.WriteLine("           M      ");
-                            Console.WriteLine("          MMM      ");
-                            Console.WriteLine("         |___|       ");
-                            Console.WriteLine("     __MMMMMMMMM__    ");
-                            Console.WriteLine("    [   |______|  ]   ");
-                            Console.WriteLine("   [    |Bridge|   ]  ");
-                            Console.WriteLine("  [     |      |    ] ");
-                            Console.WriteLine("  |-----------------| ");
-                            Console.WriteLine("  |       | | Dorm  | ");
-                            Console.WriteLine("  |       | |   X   | ");
-                            Console.WriteLine("  |_______| |_______| ");
-                            Console.WriteLine("  |       | |       | ");
-                            Console.WriteLine("  |Storage| |  Med  | ");
-                            Console.WriteLine("  |_______|_|_______| ");
-                            Console.WriteLine("  |    |       |    | ");
-                            Console.WriteLine("  |    |AirLock|    | ");
-                            Console.WriteLine("  |    |       |    | ");
-                            Console.WriteLine("  |    |-------|    | ");
-                            Console.WriteLine("  A    |       |    A ");
-                            Console.WriteLine(" A|||||||||||||||||||A ");
-                            Console.WriteLine("|||A|A|A|||A|||A|A|A||| ");
-                            Console.WriteLine("A||A|A|A|||A|||A|A|A||A ");
-                            Console.WriteLine();
-                            Console.WriteLine("Press any key to put away map");
-                            Console.ReadLine();
-                            Dorm();
-                            break;
+                           
                         }
                 }
             }
