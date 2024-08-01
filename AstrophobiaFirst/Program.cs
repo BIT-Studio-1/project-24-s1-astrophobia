@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿
+using System.Threading;
 using System;
 using System.ComponentModel.Design;
 using System.Security.Cryptography.X509Certificates;
@@ -7,23 +8,23 @@ namespace AstrophobiaFirst
 {
     internal class Program
     {
-        public bool
+        public static bool
                 Comms = false,
                 Thrusters = false,
                 Reactor = false,
                 ShipAi = false;
+        public static bool power = false;
+        public static bool torch = false;
+        public static int oxygenLevel = 999;
+        public static int reactorCore = 150;
+        public static string currentroom = "\0";
+        public static int dormRoomCount = 0;
+
         static void Main(string[] args)
         {
-            
-            int oxygenLevel = 999;
-            int reactorCore = 150;
-            bool power = false;
-            bool torch = false;
-            string room = "\0";
-
-            Mainmenu(ref torch, oxygenLevel, reactorCore, power);
+            Mainmenu();
         }
-        static void Mainmenu(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+        static void Mainmenu()
         {
             Console.Clear();
             Console.WriteLine("   __    ___  ____  ____  _____  ____  _   _  _____  ____  ____    __   \r\n  /__\\  / __)(_  _)(  _ \\(  _  )(  _ \\( )_( )(  _  )(  _ \\(_  _)  /__\\  \r\n /(__)\\ \\__ \\  )(   )   / )(_)(  )___/ ) _ (  )(_)(  ) _ < _)(_  /(__)\\ \r\n(__)(__)(___/ (__) (_)\\_)(_____)(__)  (_) (_)(_____)(____/(____)(__)(__)\n");
@@ -42,13 +43,13 @@ namespace AstrophobiaFirst
                 case "play":
                 case "1":
                     Console.Clear();
-                    Intro(ref torch, oxygenLevel, reactorCore,  power);
+                    Intro();
                     break;
                 case "2":
                 case "HELP":
                 case "Help":
                 case "help":
-                    Help(ref torch, oxygenLevel, reactorCore,  power);
+                    Help();
                     break;
                 case "4":
                 case "EXIT":
@@ -58,7 +59,7 @@ namespace AstrophobiaFirst
                     break;
             }
         }
-        static void Help(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+        static void Help()
         {
             string playerChoice;
             Console.Clear();
@@ -87,7 +88,7 @@ namespace AstrophobiaFirst
                         Console.WriteLine("\nship stats: This allows you to access oxygen levels and see what parts of the ship or damaged, enabled or disabled.");
                         Console.WriteLine("\nHit Enter to go back to the Help Options page.");
                         Console.ReadLine();
-                        Help(ref torch, oxygenLevel, reactorCore,  power);
+                        Help();
                         break;
                     }
                 case "2":
@@ -103,12 +104,12 @@ namespace AstrophobiaFirst
                     Console.WriteLine("There are multiple endings to find along the way, some good, some bad.\nWill you be able to fix the ship or escape before it is to late?");
                     Console.WriteLine("\nHit Enter to go back to the Help Options page.");
                     Console.ReadLine();
-                    Help(ref torch, oxygenLevel, reactorCore,  power);
+                    Help();
                     break;
                 default:
                     {
                         Console.Clear();
-                        Mainmenu(ref torch, oxygenLevel, reactorCore,  power);
+                        Mainmenu();
                         break;
                     }
             }
@@ -118,7 +119,7 @@ namespace AstrophobiaFirst
             Console.WriteLine("Items are stored here");
             //We have yet to use this, maybe a menu function that displays items?
         }
-        static void IGmenu(ref bool torch, string currentRoom, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void IGmenu(ref string currentRoom)
         {
             string Border = new string('*', 42);
             Console.WriteLine();
@@ -134,24 +135,24 @@ namespace AstrophobiaFirst
                 case "1":
                     if (currentRoom == "Dorm")
                     {
-                        Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        Dorm();
                     }
                     if (currentRoom == "Hall")
                     {
-                        Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        Hall();
                     }
                     if (currentRoom == "Bridge")
                     {
-                        Bridge(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        Bridge();
                     }
                     break;
                 case "2":
                     {
-                        Intro(ref torch, oxygenLevel, reactorCore,  power);
+                        Intro();
                         break;
                     }
                 case "3":
-                    Mainmenu(ref torch, oxygenLevel, reactorCore,  power);
+                    Mainmenu();
                     break;
                 case "4":
                     GameEnd();
@@ -160,9 +161,9 @@ namespace AstrophobiaFirst
         }
         //The methods below are all the rooms that will be found in this game.
 
-        static void Intro(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+        static void Intro()
         {
-            int dormRoomCount = 0;
+
             string playerChoice;
 
             Console.WriteLine("There is a little bit of story, type skip if you wish to skip it, otherwise just hit enter to begin...");
@@ -175,7 +176,7 @@ namespace AstrophobiaFirst
                         Console.WriteLine("You have Chosen to skip, skipping...");
                         Thread.Sleep(1500);
                         Console.Clear();
-                        Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        Dorm();
                         break;
                     }
                 default:
@@ -183,14 +184,14 @@ namespace AstrophobiaFirst
                         Console.WriteLine("This story takes place in the year 2197, humanity has advanced to and beyond the stars, developing FTL engines \n(Faster Than Light) And, as humanity does, it used this technology to expand their territory.\nTo give themselves places to go, to get away from Earth. Which, at the time was breaching a population of over \n50 billion. Earth alone was far from enough to sustain this population, and so many fled abord vast ships, heading for \nfaraway planets, for a second chance at life. You, happened to be aboard on of these ships...");
                         Console.WriteLine("Hit Enter to Begin...");
                         Console.ReadLine();
-                        Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        Dorm();
                         break;
                     }
 
             }
         }
         //below are all the rooms
-        public static void Dorm(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        public static void Dorm()
         {
             string temp = null;
             string currentRoom = "Dorm";
@@ -207,7 +208,7 @@ namespace AstrophobiaFirst
             {
                 case "LOOK":
                     {
-                        LookDorm(ref torch, oxygenLevel, reactorCore,  power);
+                        LookDorm();
                         break;
                     }
                 case "LEAVE":
@@ -215,13 +216,13 @@ namespace AstrophobiaFirst
                         if (currentRoom == "Dorm" && torch == false)
                         {
                             Console.WriteLine("You cannot see, so you stumble around for a little bit. Making no progress, you may want to see if you can find something to light the way.");
-                            Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            Dorm();
                         }
                         break;
                     }
                 case "MENU":
                     {
-                        IGmenu(ref torch, currentRoom, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        IGmenu(ref currentRoom);
                         break;
                     }
             }
@@ -234,23 +235,23 @@ namespace AstrophobiaFirst
                 {
                     case "LOOK":
                         {
-                            LookDorm(ref torch, oxygenLevel, reactorCore, power);
+                            LookDorm();
                             break;
                         }
                     case "LEAVE":
                         dormRoomCount++;
-                        Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore, power);
+                        Hall();
                         break;
                     case "MENU":
                         {
-                            IGmenu(ref torch, currentRoom, dormRoomCount, oxygenLevel, reactorCore, power);
+                            IGmenu(ref currentRoom);
                             break;
                         }
                     case "INVENTORY":
                         {
                             Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
                             Console.ReadLine();
-                            Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore, power);
+                            Dorm();
                             break;
                         }
                 }
@@ -264,33 +265,33 @@ namespace AstrophobiaFirst
                 {
                     case "LOOK":
                         {
-                            LookDorm(ref torch, oxygenLevel, reactorCore,  power);
+                            LookDorm();
                             break;
                         }
                     case "LEAVE":
                         {
                             dormRoomCount++;
-                            Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            Hall();
                             break;
                         }
                     case "MENU":
                         {
-                            IGmenu(ref torch, currentRoom, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            IGmenu(ref currentRoom);
                             break;
                         }
                     case "INVENTORY":
                         {
                             Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
                             Console.ReadLine();
-                            Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            Dorm();
                             break;
                         }
                 }
             }
-            
+
             else { }
         }
-        static void Hall(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void Hall()
         {
             string currentRoom = "Hall";
             string temp, playerChoice;
@@ -310,13 +311,13 @@ namespace AstrophobiaFirst
                     case "DORM":
                         {
                             dormRoomCount++;
-                            Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            Dorm();
                             break;
                         }
                     case "GO TO BRIDGE":
                     case "BRIDGE":
                         {
-                            Bridge(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            Bridge();
                             break;
                         }
                     case "GO TO MED":
@@ -324,13 +325,13 @@ namespace AstrophobiaFirst
                         {
                             if (power == true)
                             {
-                                Med(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                                Med();
                             }
                             else
                             {
                                 Console.WriteLine("This room is locked, press enter to return");
                                 Console.ReadLine();
-                                Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                                Hall();
                             }
                             break;
                         }
@@ -339,13 +340,13 @@ namespace AstrophobiaFirst
                         {
                             if (power == true)
                             {
-                                Storage(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                                Storage();
                             }
                             else
                             {
                                 Console.WriteLine("This room is locked, press enter to return");
                                 Console.ReadLine();
-                                Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                                Hall();
                             }
                             break;
                         }
@@ -354,60 +355,60 @@ namespace AstrophobiaFirst
                         {
                             if (power == true)
                             {
-                                AirLock(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                                AirLock();
                             }
                             else
                             {
                                 Console.WriteLine("This room is locked, press enter to return");
                                 Console.ReadLine();
-                                Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                                Hall();
                             }
                             break;
                         }
                     case "LOOK":
                         {
-                            LookHall(ref torch, oxygenLevel, reactorCore,  power);
+                            LookHall();
                             break;
                         }
                     case "MENU":
                         {
-                            IGmenu(ref torch, currentRoom, dormRoomCount, oxygenLevel, reactorCore,  power);
+                            IGmenu(ref currentRoom);
                             break;
                         }
                     case "INVENTORY":
                         {
                             Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
                             Console.ReadLine();
-                            Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore, power);
+                            Hall();
                             break;
                         }
                 }
             } while (count == 0);
-            
+
             Console.ReadLine();
         }
-        static void Med(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void Med()
         {
             Console.WriteLine("You are in Med");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
-            Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+            Hall();
         }
-        static void Storage(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void Storage()
         {
             Console.WriteLine("You are in Storage");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
-            Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+            Hall();
         }
-        static void AirLock(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void AirLock()
         {
             Console.WriteLine("You are in AirLock");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
-            Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+            Hall();
         }
-        static void Bridge(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void Bridge()
         {
             string currentRoom = "Bridge";
             string temp, playerChoice;
@@ -422,7 +423,7 @@ namespace AstrophobiaFirst
             {
                 case "LOOK":
                     {
-                        LookBridge(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        LookBridge();
                         break;
                     }
                 case "SHIP STATS":
@@ -430,24 +431,24 @@ namespace AstrophobiaFirst
                 case "SHIP":
                 case "STATS":
                     {
-                        ShipStats(ref oxygenLevel, reactorCore);
+                        ShipStats();
                         ShipSystems();
-                        Bridge(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        Bridge();
                         break;
                     }
                 case "LEAVE":
                     {
-                        Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        Hall();
                         break;
                     }
                 case "MENU":
                     {
-                        IGmenu(ref torch, currentRoom, dormRoomCount, oxygenLevel, reactorCore,  power);
+                        IGmenu(ref currentRoom);
                         break;
                     }
             }
         }
-        static void BridgeIntro(ref bool torch, ref int dormRoomCount, ref int oxygenLevel, ref int reactorCore, bool power)
+        static void BridgeIntro()
         {
             bool BridgeIntro = false;
             if (BridgeIntro == false)
@@ -465,7 +466,7 @@ namespace AstrophobiaFirst
                 //Thread.Sleep(3000);
                 Console.WriteLine("Press Enter to Inspect");
                 Console.ReadLine();
-                ShipStats(ref oxygenLevel, reactorCore);
+                ShipStats();
                 BridgeIntro = true;
 
             }
@@ -476,7 +477,7 @@ namespace AstrophobiaFirst
         }
         //Below this are all the "LOOK" methods.
 
-        static void LookDorm(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+        static void LookDorm()
         {
             string temp;
             int dormRoomCount = 1;
@@ -497,8 +498,8 @@ namespace AstrophobiaFirst
                                 torch = true;
                                 Console.WriteLine("\nYou pick up the torch...(Press any Key)\n");
                             }
-                            
-                            
+
+
                             break;
                         case "N":
                             Console.WriteLine("\nYou decided not to pick up the torch, But you still cannot see.\nMaybe it would be better to pick it up...");
@@ -507,7 +508,7 @@ namespace AstrophobiaFirst
                             break;
                     }
                 } while (temp != "Y");
-                Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                Dorm();
             }
             else if (currentRoom == "Dorm" && torch == true && dormRoomCount > 0)
             {
@@ -515,10 +516,10 @@ namespace AstrophobiaFirst
                 Console.WriteLine("There is nothing else in the room \nPress any key...");
                 dormRoomCount++;
                 Console.ReadLine();
-                Dorm(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                Dorm();
             }
         }
-        static void LookBridge(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void LookBridge()
         {
             string temp;
             Console.WriteLine("In front of you to your left and right are the two pilot seats, various buttons and knobs in front of each. To your left is a computer console displaying the ship's status. To your right are a few more consoles with flashing ERROR screens. \nYou spot a manual on the controls to your left. \nWhat would you like to do? \n1. Check computer \n2. Stop looking");
@@ -526,65 +527,65 @@ namespace AstrophobiaFirst
             switch (temp)
             {
                 case "1":
-                    ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    ShipComputer();
                     break;
                 case "2":
-                    Bridge(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    Bridge();
                     break;
             }
         }
-        static void ShipComputer(ref bool torch, int dormRoomCount, int oxygenLevel, int reactorCore,  bool power)
+        static void ShipComputer()
         {
             string temp;
             Console.WriteLine("You look over at the computer console, there are a couple things you can do here. \n1. Check oxygen levels and reactor core fuel \n2. Check ship health \n3. Turn the main power back on \n4. Fix Engines\n5. Fix Oxygen\n6. Leave");
             temp = Console.ReadLine();
             int count = 0;
-            
+
             switch (temp)
             {
                 case "1":
-                    ShipStats(ref oxygenLevel, reactorCore);
-                    ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    ShipStats();
+                    ShipComputer();
                     break;
                 case "2":
                     ShipSystems();
-                    ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    ShipComputer();
                     break;
                 case "3":
-                    Task1(ref power, reactorCore);
+                    Task1();
                     count++;
-                    ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    ShipComputer();
                     break;
                 case "4":
-                    Task2(ref torch, oxygenLevel, reactorCore,  power);
+                    Task2();
                     count++;
-                    ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    ShipComputer();
                     break;
                 case "5":
                     if (count >= 2)
                     {
-                        Task3(ref torch, oxygenLevel, reactorCore,  power);
+                        Task3();
                     }
                     else
                     {
                         Console.WriteLine("You must complete other tasks first, press Enter to continue");
                         Console.ReadLine();
                     }
-                    ShipComputer(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    ShipComputer();
                     break;
                 case "6":
-                    LookBridge(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+                    LookBridge();
                     break;
             }
         }
-        static void LookHall(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+        static void LookHall()
         {
             int dormRoomCount = 1;
             Console.WriteLine("\nThe ship is on backup power and some of the doors seem to be locked shut, maybe if you get the main power back on they'll open.");
             Console.ReadLine();
-            Hall(ref torch, dormRoomCount, oxygenLevel, reactorCore,  power);
+            Hall();
         }
-        static void ShipStats(ref int oxygenLevel, int reactorCore)
+        static void ShipStats()
         {
             string Border = new string('*', 25);
 
@@ -602,7 +603,7 @@ namespace AstrophobiaFirst
 
         }
         // ShipSystems status window
-        static void ShipSystems(ref bool Comms, ref bool Thrusters, bool Reactor, bool ShipAi)
+        static void ShipSystems()
         {
             string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
 
@@ -652,7 +653,7 @@ namespace AstrophobiaFirst
             Console.ReadLine();
         }
         //Task 1 is for within the bridge/within the main computer
-        public static void Task1(ref bool power, int reactorCore)
+        public static void Task1()
         {
             Random rand = new Random();
             int[] numbers = new int[7];
@@ -730,14 +731,14 @@ namespace AstrophobiaFirst
                 switch (temp)
                 {
                     case "Y":
-                        Task1(ref power, reactorCore);
+                        Task1();
                         break;
 
                 }
             }
         }
         //Task 2 is for Engine/operation room once added
-        public static void Task2(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+        public static void Task2()
         {
             int Round = 3;
             int Correct = 0;
@@ -754,7 +755,7 @@ namespace AstrophobiaFirst
                 {
                     Console.WriteLine("--- You failed to fix the ships thruster =( ---");
                     Thread.Sleep(2000);
-                    Lose2(ref torch, oxygenLevel, reactorCore,  power);
+                    Lose2();
                     int frequency = 2000;
 
                     for (int i = 0; i < 10; i++)
@@ -833,7 +834,7 @@ namespace AstrophobiaFirst
                         Correct++;
                     }
                 }
-                
+
 
             } while ((Correct != Round) && (Correct < Round));
             Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
@@ -842,61 +843,61 @@ namespace AstrophobiaFirst
             Console.ReadLine();
         }
         //Task 3 is for in the oxygen room once that has been made
-        public static void Task3(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+        public static void Task3()
+        {
+            Console.WriteLine("You will be given a sequence of numbers to remember");
+            string temp;
+            char answer;
+            int number = 1;
+            do
             {
-                Console.WriteLine("You will be given a sequence of numbers to remember");
-                string temp;
-                char answer;
-                int number = 1;
-                do
-                {
-                    Console.WriteLine("\nAre you ready: y or n");
-                    temp = Console.ReadLine();
-                    answer = Convert.ToChar(temp);
-                } while ((answer != 'y') && (answer != 'n'));
-                Console.WriteLine("Thank you.");
-                Thread.Sleep(1000);
-                Console.Clear();
+                Console.WriteLine("\nAre you ready: y or n");
+                temp = Console.ReadLine();
+                answer = Convert.ToChar(temp);
+            } while ((answer != 'y') && (answer != 'n'));
+            Console.WriteLine("Thank you.");
+            Thread.Sleep(1000);
+            Console.Clear();
 
-                int count = 0, num1, num2;
-                Random rand = new Random();
-                num1 = rand.Next(1, 101);
-                Console.WriteLine("\nThe code is a number between 1-100, but you can't remember it.\nYou will have to guess quickly to find the answer before you black out\nYou should get at least 6 guesses.");
-                do
-                {
-                    Console.Write("\nPlease type a number:  ");
-                    temp = Console.ReadLine();
-                    num2 = Convert.ToInt32(temp);
-                    if (num2 > num1)
-                    {
-                        Console.WriteLine("The number you are looking for is smaller then this");
-                    }
-                    if (num2 < num1)
-                    {
-                        Console.WriteLine("The number you are looking for is larger then this");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Correct code entered");
-                    }
-                    count++;
-                    if (count >= 6)
-                    {
-                        Console.WriteLine("Oxygen Levels are critical");
-                        Thread.Sleep(1000);
-                        Lose1(ref torch, oxygenLevel, reactorCore,  power);
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Try a different number");
-                    }
-                } while ((num2 != num1) && (count <= 6));
-
-                Console.ReadLine();
-            }
-            public static void Lose1(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+            int count = 0, num1, num2;
+            Random rand = new Random();
+            num1 = rand.Next(1, 101);
+            Console.WriteLine("\nThe code is a number between 1-100, but you can't remember it.\nYou will have to guess quickly to find the answer before you black out\nYou should get at least 6 guesses.");
+            do
             {
+                Console.Write("\nPlease type a number:  ");
+                temp = Console.ReadLine();
+                num2 = Convert.ToInt32(temp);
+                if (num2 > num1)
+                {
+                    Console.WriteLine("The number you are looking for is smaller then this");
+                }
+                if (num2 < num1)
+                {
+                    Console.WriteLine("The number you are looking for is larger then this");
+                }
+                else
+                {
+                    Console.WriteLine("Correct code entered");
+                }
+                count++;
+                if (count >= 6)
+                {
+                    Console.WriteLine("Oxygen Levels are critical");
+                    Thread.Sleep(1000);
+                    Lose1();
+
+                }
+                else
+                {
+                    Console.WriteLine("Try a different number");
+                }
+            } while ((num2 != num1) && (count <= 6));
+
+            Console.ReadLine();
+        }
+        public static void Lose1()
+        {
             int frequency = 2000;
 
             for (int i = 0; i < 10; i++)
@@ -904,91 +905,91 @@ namespace AstrophobiaFirst
                 Console.Beep(frequency, 300);
                 frequency -= 200;
             }
-                Console.WriteLine("\n\nYou feel yourself starting to lose consciousness and you know the end is near.\nYou can no longer hold yourself up to the oxygen terminal and fall to the ground.");
-                Console.ReadLine();
-                Console.Clear();
-                Console.WriteLine("This is the end for you...");
-                Thread.Sleep(2000);
-                Console.Clear();
-                Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
-                string temp = Console.ReadLine();
-                switch (temp)
-                {
-                    case "y":
-                    case "Y":
-                        Mainmenu(ref torch, oxygenLevel, reactorCore,  power);
-                        break;
-                    case "n":
-                    case "N":
-                        GameEnd();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            public static void Lose2(ref bool torch, int oxygenLevel, int reactorCore,  bool power)
+            Console.WriteLine("\n\nYou feel yourself starting to lose consciousness and you know the end is near.\nYou can no longer hold yourself up to the oxygen terminal and fall to the ground.");
+            Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("This is the end for you...");
+            Thread.Sleep(2000);
+            Console.Clear();
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
             {
-                Console.WriteLine("\n\nYou got stuck in the thruster, there is no escape.");
-                Console.ReadLine();
-                Console.Clear();
-                Console.WriteLine("You feel your body being torn apart...");
-                Thread.Sleep(2000);
-                Console.Clear();
-                Console.WriteLine("Achievement unlocked - Blown away\n  -Failed the game gruesomely");
-                Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
-                string temp = Console.ReadLine();
-                switch (temp)
-                {
-                    case "y":
-                    case "Y":
-                        Mainmenu(ref torch, oxygenLevel, reactorCore,  power);
-                        break;
-                    case "n":
-                    case "N":
-                        GameEnd();
-                        break;
-                    default:
-                        break;
-                }
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
             }
-        public static void Win1(ref string []inventory, int oxygenLevel, int reactorCore,  bool power)
+        }
+        public static void Lose2()
+        {
+            Console.WriteLine("\n\nYou got stuck in the thruster, there is no escape.");
+            Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("You feel your body being torn apart...");
+            Thread.Sleep(2000);
+            Console.Clear();
+            Console.WriteLine("Achievement unlocked - Blown away\n  -Failed the game gruesomely");
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
             {
-                bool torch = true;
-                Console.Clear();
-                Console.WriteLine(".");
-                Thread.Sleep(250);
-                Console.Write(" .");
-                Thread.Sleep(250);
-                Console.Write(" .");
-                Thread.Sleep(250);
-                Console.Clear();
-                Console.WriteLine("The ship's oxygen is back online.\nDue to the period of time that the oxygen was offline you may experiance light headedness.\nIf so please make your way to a safe seating area.");
-                Console.WriteLine("\nPress enter to continue.");
-                Console.ReadLine();
-                Console.WriteLine("\n\nYou did it! Some how you managed to guess the code that had slipped your mind before all of the oxygen ran out.");
-                Console.WriteLine("You slump to the floor relieved that you will live to see another day. Once you feel better you will be able to make your way back to the bridge you will be able to set auto pilot to the nearest space station and receive proper medical care.");
-                Console.WriteLine("\nPress enter to continue");
-                Console.ReadLine();
-                Console.Clear();
-                Console.WriteLine("You finished the game:\n\n                      Achievement Unlocked - Linear Completion!\n                           -Complete the game it was intended to be completed.");
-                Console.Write("Would you like to return to main menu to play again? (y or n):  ");
-                string temp = Console.ReadLine();
-                switch (temp)
-                {
-                    case "y":
-                    case "Y":
-                        Mainmenu(ref torch, oxygenLevel, reactorCore,  power);
-                        break;
-                    case "n":
-                    case "N":
-                        GameEnd();
-                        break;
-                    default:
-                        break;
-                }
-                
-                // Rooms not yet in game or may not be needed - Med, Reactor, Storage, Airlock
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
             }
+        }
+        public static void Win1(ref string[] inventory)
+        {
+            bool torch = true;
+            Console.Clear();
+            Console.WriteLine(".");
+            Thread.Sleep(250);
+            Console.Write(" .");
+            Thread.Sleep(250);
+            Console.Write(" .");
+            Thread.Sleep(250);
+            Console.Clear();
+            Console.WriteLine("The ship's oxygen is back online.\nDue to the period of time that the oxygen was offline you may experiance light headedness.\nIf so please make your way to a safe seating area.");
+            Console.WriteLine("\nPress enter to continue.");
+            Console.ReadLine();
+            Console.WriteLine("\n\nYou did it! Some how you managed to guess the code that had slipped your mind before all of the oxygen ran out.");
+            Console.WriteLine("You slump to the floor relieved that you will live to see another day. Once you feel better you will be able to make your way back to the bridge you will be able to set auto pilot to the nearest space station and receive proper medical care.");
+            Console.WriteLine("\nPress enter to continue");
+            Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("You finished the game:\n\n                      Achievement Unlocked - Linear Completion!\n                           -Complete the game it was intended to be completed.");
+            Console.Write("Would you like to return to main menu to play again? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
+            {
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
+            }
+
+            // Rooms not yet in game or may not be needed - Med, Reactor, Storage, Airlock
+        }
         static void GameEnd()
         {
             Console.WriteLine("You have chosen to exit the game");
@@ -997,6 +998,5 @@ namespace AstrophobiaFirst
             Thread.Sleep(1000);
             Environment.Exit(0);
         }
-    } 
-} 
-
+    }
+}
