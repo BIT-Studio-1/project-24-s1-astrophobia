@@ -802,8 +802,7 @@ namespace AstrophobiaFirst
         static void ShipSystems()
         {
             string Border = new string('-', 44);
-            List<bool> components = new List<bool>();
-            
+            List<bool> components = new List<bool>();           
             string[] cNames = { "Long Ranged Comms", "Thrusters", "Reactor Core", "Ai Systems" };
             string A = "Active", D = "Disabled";
             
@@ -813,11 +812,11 @@ namespace AstrophobiaFirst
             components.Add(Reactor);
             components.Add(ShipAi);
 
-            foreach (bool i in components)
+            for (int j = 0; j < cNames.Length; j++)
             {
-                if (i == true)
+                if (components[j] == true)
                 {                   
-                    Console.Write($"|  {(i)}".PadRight(31));
+                    Console.Write($"|  {cNames[j]}".PadRight(31));
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write($"[{A}]".PadRight(12));
                     Console.ResetColor();
@@ -825,7 +824,7 @@ namespace AstrophobiaFirst
                 }
                 else
                 {                   
-                    Console.Write($"|  {i}".PadRight(31));
+                    Console.Write($"|  {cNames[j]}".PadRight(31));
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write($"[{D}]".PadRight(12));
                     Console.ResetColor();
