@@ -8,7 +8,7 @@ namespace AstrophobiaFirst
     internal class Program
     {
         public static bool
-                Comms = false,
+                Comms = true,
                 Thrusters = false,
                 Reactor = true,
                 ShipAi = false;
@@ -801,21 +801,21 @@ namespace AstrophobiaFirst
         // ShipSystems status window
         static void ShipSystems()
         {
-            //string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
+            string Border = new string('-', 44);
             List<bool> components = new List<bool>();
             
             string[] cNames = { "Long Ranged Comms", "Thrusters", "Reactor Core", "Ai Systems" };
             string A = "Active", D = "Disabled";
-            bool status 
-            //Console.WriteLine(Border);
+            
+            Console.WriteLine(Border);
             components.Add(Comms);
             components.Add(Thrusters);
             components.Add(Reactor);
             components.Add(ShipAi);
 
-            foreach (string i in cNames)
+            foreach (bool i in components)
             {
-                if (comps == true)
+                if (i == true)
                 {                   
                     Console.Write($"|  {(i)}".PadRight(31));
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -831,109 +831,12 @@ namespace AstrophobiaFirst
                     Console.ResetColor();
                     Console.WriteLine("|");
                 }
+                
             }
-            //if (Comms == true)
-            //{
-            //    //LRC = A;
-            //    Console.Write($"|  Long Ranged Comms".PadRight(31));
-            //    Console.ForegroundColor = ConsoleColor.Green;
-            //    Console.Write($"[{A}]".PadRight(12));
-            //    Console.ResetColor();
-            //    Console.WriteLine("|");
-            //}
-            //else
-            //{
-            //    //LRC = D;
-            //    Console.Write($"|  Long Ranged Comms".PadRight(31));
-            //    Console.ForegroundColor = ConsoleColor.Red;
-            //    Console.Write($"[{D}]".PadRight(12));
-            //    Console.ResetColor();
-            //    Console.WriteLine("|");
-            //}
+            Console.WriteLine(Border);
+            Console.WriteLine("Press enter to exit");
             Console.ReadLine();
-        }
-        //    if (Thrusters == true)
-        //    {
-        //        Thrust = A;
-        //        Console.Write($"|  Thrusters".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Green;
-        //        Console.Write($"[{Thrust}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-        //    else
-        //    {
-        //        Thrust = D;
-        //        Console.Write($"|  Thrusters".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.Write($"[{Thrust}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-
-        //    if (Reactor == true)
-        //    {
-        //        Core = A;
-        //        Console.Write($"|  Reactor Core".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Green;
-        //        Console.Write($"[{Core}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-        //    else
-        //    {
-        //        Core = D;
-        //        Console.Write($"|  Reactor Core".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.Write($"[{Core}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-        //    if (ShipAi == true)
-        //    {
-        //        Ai = A;
-        //        Console.Write($"|  Ai System".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Green;
-        //        Console.Write($"[{Ai}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-        //    else
-        //    {
-        //        Ai = D;
-        //        Console.Write($"|  Ai System".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.Write($"[{Ai}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-
-        //    Console.WriteLine(Border);
-        //    Console.WriteLine("Press Enter To Exit");
-        //    Console.ReadLine();
-        //}
-        //public static void toggle(string )
-        //{
-        //    if (Comms == true)
-        //    {
-        //        LRC = A;
-        //        Console.Write($"|  Long Ranged Comms".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Green;
-        //        Console.Write($"[{LRC}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-        //    else
-        //    {
-        //        LRC = D;
-        //        Console.Write($"|  Long Ranged Comms".PadRight(31));
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.Write($"[{LRC}]".PadRight(12));
-        //        Console.ResetColor();
-        //        Console.WriteLine("|");
-        //    }
-        //}
-        //Task 1 is for within the bridge/within the main computer
+        }        
         public static void Task1()
         {
             Random rand = new Random();
