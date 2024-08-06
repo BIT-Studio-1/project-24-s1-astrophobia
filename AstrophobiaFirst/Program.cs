@@ -117,8 +117,10 @@ namespace AstrophobiaFirst
         }
         public static void Inventory(RoomMethod previousRoom)
         {
-            Console.WriteLine("Items are stored here");
-            //We have yet to use this, maybe a menu function that displays items?
+            Console.WriteLine("You open your bag;");
+
+            
+
             previousRoom();
         }
         static void IGmenu(ref string currentRoom)
