@@ -3,6 +3,8 @@ using System.Threading;
 using System;
 using System.ComponentModel.Design;
 using System.Security.Cryptography.X509Certificates;
+using System.Net.Http.Headers;
+using System.Xml.Linq;
 
 namespace AstrophobiaFirst
 {
@@ -10,7 +12,16 @@ namespace AstrophobiaFirst
     {
         public delegate void RoomMethod(); //Allows player to return the the room they were in before opening the menu.
 
-        public bool
+        public struct Item //Qualities of the item
+        {
+            public string Name;
+            public string Description;
+            public int Quant;
+        }
+     
+        public static List <Item> Inventory = new List <Item> ();//Inventory list that is added to with each new item.
+
+        public static bool
                 Comms = false,
                 Thrusters = false,
                 Reactor = false,
@@ -105,12 +116,19 @@ namespace AstrophobiaFirst
                     }
             }
         }
-        public static void Inventory(RoomMethod previousRoom)
+        public static void InventoryMethod(RoomMethod previousRoom)
         {
-            Console.WriteLine("You open your bag;");
+            Console.Clear();
+            Console.WriteLine("You open your bag;\n");
+            foreach (var Item in Inventory)//Displays each inventory item in a readable format
+            {
+                Console.WriteLine($"{Item.Name} - x{Item.Quant}\n   {Item.Description}\n");
 
-            
+            }
 
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadLine();
+            Console.Clear();
             previousRoom();
         }
         static void IGmenu(ref string currentRoom)
@@ -217,7 +235,7 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 4: //Inventory
-                        Inventory(Dorm);
+                        InventoryMethod(Dorm);
                         break;
                 }
             }
@@ -244,7 +262,7 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 4: //Inventory
-                        Inventory(Dorm);
+                        InventoryMethod(Dorm);
                         break;
                 }
             }
@@ -271,7 +289,7 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 4: //Inventory
-                        Inventory(Dorm);
+                        InventoryMethod(Dorm);
                         break;
                         break;
                 }
@@ -350,7 +368,7 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 8: //Inventory
-                        Inventory(Hall);
+                        InventoryMethod(Hall);
                         break;
                 }
             } while (count == 0);
@@ -458,6 +476,13 @@ namespace AstrophobiaFirst
                     case 1: //Yes
                         torch = true;
                         Console.WriteLine("\nYou pick up the torch...(Press any Key)\n");
+                       
+                            Item torchItem; //This adds a torch to the inventory, there may be a simpler way however.
+                            torchItem.Name = "Torch";
+                            torchItem.Description = "A device for finding your way in the dark.";
+                            torchItem.Quant = 1;
+                            Inventory.Add(torchItem);
+
                         break;
                     case 2: //No
                         Console.WriteLine("\nYou decided not to pick up the torch, But you still cannot see.\nMaybe it would be better to pick it up...");
@@ -572,7 +597,7 @@ namespace AstrophobiaFirst
         // ShipSystems status window
         static void ShipSystems()
         {
-            string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
+             string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
 
             Console.WriteLine(Border);
             if (Comms == true)
