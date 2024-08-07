@@ -505,7 +505,7 @@ namespace AstrophobiaFirst
                               "\n5    Fix Oxygen" +
                               "\n6    Leave\n");
 
-            int count = 0;
+            
             int userInput;
             userInput = ValidateUserInput(6);   
             switch (userInput)
@@ -519,17 +519,31 @@ namespace AstrophobiaFirst
                     ShipComputer();
                     break;
                 case 3: //Turn power on
-                    Task1();
-                    count++;
-                    ShipComputer();
+                    if (power == false)
+                    {
+                        Task1();
+                    }
+                    else
+                    {
+                        Console.WriteLine("You've already completed this task \nPress enter to continue...");
+                        Console.ReadLine();
+                        ShipComputer();
+                    }
                     break;
                 case 4: //Fix Engines
-                    Task2();
-                    count++;
-                    ShipComputer();
+                    if (Thrusters == false)
+                    {
+                        Task2();
+                    }
+                    else
+                    {
+                        Console.WriteLine("You've already completed this task \nPress enter to continue...");
+                        Console.ReadLine();
+                        ShipComputer();
+                    }
                     break;
                 case 5: //Fix Oxygen
-                    if (count >= 2)
+                    if (power && Thrusters == true)
                     {
                         Task3();
                     }
@@ -804,6 +818,7 @@ namespace AstrophobiaFirst
 
 
             } while ((Correct != Round) && (Correct < Round));
+            Thrusters = true;
             Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
             reactorCore = reactorCore + 200;
             Thread.Sleep(2000);
