@@ -196,6 +196,7 @@ namespace AstrophobiaFirst
                         Console.WriteLine("This story takes place in the year 2197, humanity has advanced to and beyond the stars, developing FTL engines \n(Faster Than Light) And, as humanity does, it used this technology to expand their territory.\nTo give themselves places to go, to get away from Earth. Which, at the time was breaching a population of over \n50 billion. Earth alone was far from enough to sustain this population, and so many fled abord vast ships, heading for \nfaraway planets, for a second chance at life. You, happened to be aboard on of these ships...");
                         Console.WriteLine("Hit Enter to Begin...");
                         Console.ReadLine();
+                        Console.Clear();
                         Dorm();
                         break;
                     }
@@ -206,6 +207,7 @@ namespace AstrophobiaFirst
         //below are all the rooms
         public static void Dorm()
         {
+            Console.Clear();
             int userInput;
             string currentRoom = "Dorm";
 
@@ -297,6 +299,7 @@ namespace AstrophobiaFirst
         }
         static void Hall()
         {
+            Console.Clear();
             string currentRoom = "Hall";
             int count = 0;
 
@@ -377,6 +380,7 @@ namespace AstrophobiaFirst
         }
         static void Med()
         {
+            Console.Clear();
             Console.WriteLine("You are in Med");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
@@ -384,6 +388,7 @@ namespace AstrophobiaFirst
         }
         static void Storage()
         {
+            Console.Clear();
             Console.WriteLine("You are in Storage");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
@@ -391,13 +396,15 @@ namespace AstrophobiaFirst
         }
         static void AirLock()
         {
-            Console.WriteLine("You are in AirLock");
+            Console.Clear();
+            Console.WriteLine("You are in the AirLock");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
             Hall();
         }
         static void Bridge()
         {
+            Console.Clear();
             string currentRoom = "Bridge";
             string temp, playerChoice;
             oxygenLevel = oxygenLevel - 25;
@@ -458,6 +465,7 @@ namespace AstrophobiaFirst
         //Below this are all the "LOOK" methods.
         static void LookDorm()
         {
+            Console.Clear();
             string temp;
             int dormRoomCount = 1;
             string currentRoom = "Dorm", playerChoice = null;
@@ -482,7 +490,7 @@ namespace AstrophobiaFirst
                             torchItem.Description = "A device for finding your way in the dark.";
                             torchItem.Quant = 1;
                             Inventory.Add(torchItem);
-
+                        Console.ReadLine();
                         break;
                     case 2: //No
                         Console.WriteLine("\nYou decided not to pick up the torch, But you still cannot see.\nMaybe it would be better to pick it up...");
@@ -504,6 +512,7 @@ namespace AstrophobiaFirst
         }
         static void LookBridge()
         {
+            Console.Clear();
             Console.WriteLine("In front of you to your left and right are the two pilot seats, various buttons and knobs in front of each. To your left is a computer console displaying the ship's status. To your right are a few more consoles with flashing ERROR screens. \nYou spot a manual on the controls to your left. \nWhat would you like to do?");
             Console.WriteLine("\n1    Check computer" +
                               "\n2    Stop looking\n");
@@ -522,6 +531,7 @@ namespace AstrophobiaFirst
         }
         static void ShipComputer()
         {
+            Console.Clear();
             Console.WriteLine("You look over at the computer console, there are a couple things you can do here.");
             Console.WriteLine("\n1    Check oxygen levels and reactor core fuel" +
                               "\n2    Check ship health" +
@@ -572,6 +582,7 @@ namespace AstrophobiaFirst
         }
         static void LookHall()
         {
+            Console.Clear();
             int dormRoomCount = 1;
             Console.WriteLine("\nThe ship is on backup power and some of the doors seem to be locked shut, maybe if you get the main power back on they'll open.");
             Console.ReadLine();
@@ -579,6 +590,7 @@ namespace AstrophobiaFirst
         }
         static void ShipStats()
         {
+            Console.Clear();
             string Border = new string('*', 25);
 
             Thread.Sleep(100);
@@ -597,7 +609,8 @@ namespace AstrophobiaFirst
         // ShipSystems status window
         static void ShipSystems()
         {
-             string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
+            Console.Clear(); 
+            string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
 
             Console.WriteLine(Border);
             if (Comms == true)
@@ -647,6 +660,7 @@ namespace AstrophobiaFirst
         //Task 1 is for within the bridge/within the main computer
         public static void Task1()
         {
+            Console.Clear();
             Random rand = new Random();
             int[] numbers = new int[7];
             int[] user = new int[7];
@@ -670,7 +684,7 @@ namespace AstrophobiaFirst
             {
                 comp = rand.Next(1, 10);
                 numbers[i] = comp;
-                Console.WriteLine($"{comp}");
+                Console.WriteLine(comp);
             }
             Thread.Sleep(2000);
             Console.Clear();
@@ -742,6 +756,7 @@ namespace AstrophobiaFirst
 
             do
             {
+                Console.Clear();
                 Round++;
                 if (Round > 5)
                 {
