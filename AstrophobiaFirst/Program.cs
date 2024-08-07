@@ -27,7 +27,6 @@ namespace AstrophobiaFirst
                 Reactor = false,
                 ShipAi = false;
         public static bool power = false;
-        public static bool torch = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
         public static string currentroom = "\0";
@@ -131,6 +130,14 @@ namespace AstrophobiaFirst
             Console.Clear();
             previousRoom();
         }
+
+        public static bool CheckInventory(string item)
+        {
+            Console.Clear();
+            bool itemFound = Inventory.Any(Item => Item.Name == "Torch");
+            return itemFound;
+        }
+
         static void IGmenu(ref string currentRoom)
         {
             string Border = new string('*', 42);
@@ -186,7 +193,7 @@ namespace AstrophobiaFirst
                 case "SKIP":
                     {
                         Console.WriteLine("You have Chosen to skip, skipping...");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(15000);
                         Console.Clear();
                         Dorm();
                         break;
@@ -209,7 +216,7 @@ namespace AstrophobiaFirst
             int userInput;
             string currentRoom = "Dorm";
 
-            if (currentRoom == "Dorm" && torch == false && dormRoomCount == 0)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == false && dormRoomCount == 0)
             {
                 Console.WriteLine("You awaken in the dorm and it is dark. Maybe there is something in the room to help you see better." +
                     "\nWhat would you like to do, your options are:");
@@ -225,7 +232,7 @@ namespace AstrophobiaFirst
                         LookDorm();
                         break;
                     case 2: //Leave
-                        if (currentRoom == "Dorm" && torch == false)
+                        if (currentRoom == "Dorm" && CheckInventory("Torch") == false)
                         {
                             Console.WriteLine("You cannot see, so you stumble around for a little bit. Making no progress, you may want to see if you can find something to light the way.");
                             Dorm();
@@ -240,7 +247,7 @@ namespace AstrophobiaFirst
                 }
             }
             
-            if (currentRoom == "Dorm" && torch == true && dormRoomCount == 0)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == true && dormRoomCount == 0)
             {
                 Console.WriteLine("You can now see around the room. \nThere are many beds but you seem to be the only one here. \nAre you alone ? \nMaybe you will find answers if you explore outside of the room, \nthrough the door in front of you that seems to lead to a hallway... ");
                 Console.WriteLine("\n1    Look" +
@@ -267,7 +274,7 @@ namespace AstrophobiaFirst
                 }
             }
 
-            if (currentRoom == "Dorm" && torch == true && dormRoomCount >= 2)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == true && dormRoomCount >= 2)
             {
                 Console.WriteLine("\nYou are in the Dorm");
                 Console.WriteLine("\n1    Look" +
@@ -463,7 +470,7 @@ namespace AstrophobiaFirst
             string currentRoom = "Dorm", playerChoice = null;
 
             Console.WriteLine("\nYou have looked around the room");
-            if (currentRoom == "Dorm" && torch == false)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == false)
             {
                 Console.WriteLine("It is very dark in the dorm, but you manage notice a torch lying on the ground next to you, do you pick it up?");
                 Console.WriteLine("\n1    Yes" +
@@ -474,7 +481,6 @@ namespace AstrophobiaFirst
                 switch (userInput)
                 {
                     case 1: //Yes
-                        torch = true;
                         Console.WriteLine("\nYou pick up the torch...(Press any Key)\n");
                        
                             Item torchItem; //This adds a torch to the inventory, there may be a simpler way however.
@@ -493,9 +499,8 @@ namespace AstrophobiaFirst
 
                 Dorm();
             }
-            else if (currentRoom == "Dorm" && torch == true && dormRoomCount > 0)
+            else if (currentRoom == "Dorm" && CheckInventory("Torch") == true && dormRoomCount > 0)
             {
-                torch = true;
                 Console.WriteLine("There is nothing else in the room \nPress any key...");
                 dormRoomCount++;
                 Console.ReadLine();
