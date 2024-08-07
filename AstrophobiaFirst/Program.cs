@@ -7,12 +7,7 @@ namespace AstrophobiaFirst
 {
     internal class Program
     {
-        public static bool
-                Comms = true,
-                Thrusters = false,
-                Reactor = true,
-                ShipAi = false;
-        bool[] statuses = { Comms, Thrusters, Reactor, ShipAi };
+        public static bool Comms = false, Thrusters = false, Reactor = false, ShipAi = false;
 
         public static bool power = false;
         public static bool torch = false;
@@ -23,7 +18,7 @@ namespace AstrophobiaFirst
 
         static void Main(string[] args)
         {
-            ShipSystems();
+            Task2(); 
             Mainmenu();
         }
         static void Mainmenu()
@@ -1025,6 +1020,7 @@ namespace AstrophobiaFirst
                     if (Answer5 == Q5)
                     {
                         Console.WriteLine("Correct!");
+
                         Correct++;
                     }
                 }
@@ -1033,6 +1029,7 @@ namespace AstrophobiaFirst
             } while ((Correct != Round) && (Correct < Round));
             Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
             reactorCore = reactorCore + 200;
+            Thrusters = true;
             Thread.Sleep(2000);
             Console.ReadLine();
         }
