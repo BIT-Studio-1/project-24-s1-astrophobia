@@ -122,7 +122,6 @@ namespace AstrophobiaFirst
         }
        static void DisplayMap()
         {
-            char position = 'X';
             string[] mapLines = new string[]
             {
         "          MMM      ",
@@ -170,6 +169,15 @@ namespace AstrophobiaFirst
                 Console.WriteLine(mapLine);
             }
             Console.ReadLine();
+            switch(currentroom)
+            {
+                case "Dorm": Dorm();break;
+                case "Hall": Hall(); break;
+                case "Bridge":Bridge();break;
+                case "Med": Med();break;
+                case "Storage": Storage();break;
+                case "Airlock": AirLock();break;
+            }
         }
 
         public static void Inventory()
@@ -265,7 +273,7 @@ namespace AstrophobiaFirst
         public static void Dorm()
         {
             string temp = null;
-            string currentroom = "Dorm";
+           currentroom = "Dorm";
             Console.Clear();
             if (currentroom == "Dorm" && torch == false && dormRoomCount == 0)
             {
