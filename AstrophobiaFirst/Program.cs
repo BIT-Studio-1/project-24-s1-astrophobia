@@ -226,7 +226,7 @@ namespace AstrophobiaFirst
             power = false;
             oxygenLevel = 999;
             reactorCore = 150;
-            currentroom = "\0";
+            currentRoom = "\0";
             dormRoomCount = 0;
             Inventory.Clear();
             Intro();
