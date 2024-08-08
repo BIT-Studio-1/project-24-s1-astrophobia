@@ -307,7 +307,7 @@ namespace AstrophobiaFirst
                                   "\n4    Inventory" +
                                   "\n5    Map\n");
 
-                userInput = ValidateUserInput(4);
+                userInput = ValidateUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -341,7 +341,7 @@ namespace AstrophobiaFirst
                                   "\n4    Inventory" +
                                   "\n5    Map\n");
                 
-                userInput = ValidateUserInput(4);
+                userInput = ValidateUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -372,7 +372,7 @@ namespace AstrophobiaFirst
                                   "\n4    Inventory" +
                                   "\n5    Map\n");
 
-                userInput = ValidateUserInput(4);
+                userInput = ValidateUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -397,7 +397,7 @@ namespace AstrophobiaFirst
         static void Hall()
         {
             Console.Clear();
-            string currentRoom = "Hall";
+            currentRoom = "Hall";
             int count = 0;
 
             oxygenLevel = oxygenLevel - 25;
@@ -413,7 +413,7 @@ namespace AstrophobiaFirst
                               "\n9    Map\n");
 
             int userInput;
-            userInput = ValidateUserInput(8);
+            userInput = ValidateUserInput(9);
 
             do
             {
@@ -518,7 +518,7 @@ namespace AstrophobiaFirst
                               "\n5    Map\n");
 
             int userInput;
-            userInput = ValidateUserInput(4);
+            userInput = ValidateUserInput(5);
             switch (userInput)
             {
                 case 1: //Look
@@ -646,7 +646,7 @@ namespace AstrophobiaFirst
 
             int count = 0;
             int userInput;
-            userInput = ValidateUserInput(6);   
+            userInput = ValidateUserInput(7);   
             switch (userInput)
             {
                 case 1: //Check Oxygen and Reactor Core Fuel
