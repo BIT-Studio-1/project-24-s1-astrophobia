@@ -22,6 +22,7 @@ namespace AstrophobiaFirst
 
         static void Main(string[] args)
         {
+            Combat();
             Mainmenu();
         }
         static void Mainmenu()
@@ -956,6 +957,28 @@ namespace AstrophobiaFirst
             }
 
             // Rooms not yet in game or may not be needed - Med, Reactor, Storage, Airlock
+        }
+        // Combat system to be used throughout
+        public static void Combat()
+        {
+            string Border = new string('=', 44);          
+            Console.WriteLine(Border);
+            int playerHP = 100, enemyHP = 100;           
+            string blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
+            
+            Console.Write("+");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"  Player +{playerHP}".PadRight(31));
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"Enemy +{enemyHP} ".PadRight(0));
+            Console.ResetColor();
+            Console.WriteLine("+\n+".PadRight(45)+"+");
+            Console.WriteLine($"{blank}\n{blank}\n{blank}");
+            Console.WriteLine($"+  (1) Punch{T}+\n+  (2) Kick{T}+\n+  (3) Scream{T}+");
+            
+            Console.WriteLine(Border);
+            Console.WriteLine("Press Enter To Exit");
+            Console.ReadLine();
         }
         static void GameEnd()
         {
