@@ -951,7 +951,7 @@ namespace AstrophobiaFirst
         }
         public static void Win1(ref string[] inventory)
         {
-            bool torch = true;
+            
             Console.Clear();
             Console.WriteLine(".");
             Thread.Sleep(250);
