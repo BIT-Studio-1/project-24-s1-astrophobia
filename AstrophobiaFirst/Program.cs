@@ -83,7 +83,7 @@ namespace AstrophobiaFirst
                     Console.WriteLine("\nlook: This command is used to look around the room you are currently in, to help you with your surroundings, \nit may also show any items found in said room.");
                     Console.WriteLine("\nleave: Used to leave the current room you are in, assuming said room is linked to the hallway.");
                     Console.WriteLine("\nTo pick up any items that can be found in the room you are currently in, you will likely answer in yes or no. \nYou will also have to write which slot the item fills.");
-                    Console.WriteLine("\nmenu: this command will bring up up the ingame menu, and with it, a few more options for the player, \nsuch as restarting exiting the game, going to the main menu etc...");
+                    Console.WriteLine("\nmenu: this command will bring up the ingame menu, and with it, a few more options for the player, \nsuch as restarting exiting the game, going to the main menu etc...");
                     Console.WriteLine("\nUse a rooms name while in the hallway to go to the room you have typed (e.g. typing dorm goes to the Dorm room).");
                     Console.WriteLine("\ninventory: This is used to access your inventory and see what slots are free and full.");
                     Console.WriteLine("\nskip: This is used to skip any story if you don't want to read or you have already read.");
@@ -257,7 +257,7 @@ namespace AstrophobiaFirst
         static void Intro()
         {
 
-            string playerChoice;
+            string? playerChoice;
 
             Console.Clear();
             Console.WriteLine("There is a little bit of story, type skip if you wish to skip it, otherwise just hit enter to begin...");
@@ -276,7 +276,7 @@ namespace AstrophobiaFirst
                     }
                 default:
                     {
-                        Console.WriteLine("This story takes place in the year 2197, humanity has advanced to and beyond the stars, developing FTL engines \n(Faster Than Light) And, as humanity does, it used this technology to expand their territory.\nTo give themselves places to go, to get away from Earth. Which, at the time was breaching a population of over \n50 billion. Earth alone was far from enough to sustain this population, and so many fled abord vast ships, heading for \nfaraway planets, for a second chance at life. You, happened to be aboard on of these ships...");
+                        Console.WriteLine("This story takes place in the year 2197, humanity has advanced to and beyond the stars, developing FTL engines \n(Faster Than Light) And, as humanity does, it used this technology to expand their territory.\nTo give themselves places to go, to get away from Earth. Which, at the time was breaching a population of over \n50 billion. Earth alone was far from enough to sustain this population, and so many fled aboard vast ships, heading for \nfaraway planets, for a second chance at life. You, happened to be aboard on of these ships...");
                         Console.WriteLine("Hit Enter to Begin...");
                         Console.ReadLine();
                         Console.Clear();
@@ -304,7 +304,7 @@ namespace AstrophobiaFirst
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory +
+                                  "\n4    Inventory" +
                                   "\n5    Map\n");
 
                 userInput = ValidateUserInput(4);
@@ -338,7 +338,7 @@ namespace AstrophobiaFirst
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory +
+                                  "\n4    Inventory" +
                                   "\n5    Map\n");
                 
                 userInput = ValidateUserInput(4);
@@ -369,7 +369,7 @@ namespace AstrophobiaFirst
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory
+                                  "\n4    Inventory" +
                                   "\n5    Map\n");
 
                 userInput = ValidateUserInput(4);
@@ -409,7 +409,7 @@ namespace AstrophobiaFirst
                               "\n5    Enter AirLock" +
                               "\n6    Look" +
                               "\n7    Menu" +
-                              "\n8    Inventory +
+                              "\n8    Inventory" +
                               "\n9    Map\n");
 
             int userInput;
@@ -514,7 +514,7 @@ namespace AstrophobiaFirst
             Console.WriteLine("\n1    Look" +
                               "\n2    Ship Stats" +
                               "\n3    Leave" +
-                              "\n4    Menu +
+                              "\n4    Menu" +
                               "\n5    Map\n");
 
             int userInput;
@@ -572,7 +572,7 @@ namespace AstrophobiaFirst
         {
             Console.Clear();
             int dormRoomCount = 1;
-            currentRoom = "Dorm"
+            currentRoom = "Dorm";
             playerChoice = null;
 
             Console.WriteLine("\nYou have looked around the room");
@@ -641,7 +641,7 @@ namespace AstrophobiaFirst
                               "\n3    Turn the main power back on" +
                               "\n4    Fix Engines" +
                               "\n5    Fix Oxygen" +
-                              "\n6    Leave +
+                              "\n6    Leave" +
                               "\n7     Map\n");
 
             int count = 0;
