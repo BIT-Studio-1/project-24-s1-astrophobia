@@ -1,10 +1,7 @@
-﻿
-using System.Threading;
-using System;
+﻿using System;
 using System.ComponentModel.Design;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Http.Headers;
-using System.Xml.Linq;
+using System.Globalization;
+using System.Threading;
 
 namespace AstrophobiaFirst
 {
@@ -29,7 +26,7 @@ namespace AstrophobiaFirst
         public static bool power = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentroom = "\0";
+        public static string currentRoom = "Dorm";
         public static int dormRoomCount = 0;
 
         static void Main(string[] args)
@@ -115,6 +112,85 @@ namespace AstrophobiaFirst
                     }
             }
         }
+
+        static void DisplayMap()
+        {
+            string[] mapLines = new string[]
+            {
+                "          MMM         ",
+                "         |___|        ",
+                "     __MMMMMMMMM__    ",
+                "    [   |______|  ]   ",
+                "   [    |BRIDGE|   ]  ",
+                "  [     |      |    ] ",
+                "  |-----------------| ",
+                "  |       | | DORM  | ",
+                "  |       | |       | ", 
+                "  |_______| |_______| ",
+                "  |       | | MED   | ",
+                "  |STORAGE| |       | ",
+                "  |       |_|_______| ", 
+                "  |-------     |    | ",
+                "  |    |AIRLOCK|    | ",
+                "  |    |       |    | ",
+                "  |    |-------|    | ",
+                "  A    |       |    A ",
+                " A|||||||||||||||||||A ",
+                "|||A|A|A|||A|||A|A|A||| ",
+                "A||A|A|A|||A|||A|A|A||A "
+            };
+
+            for (int i = 0; i < mapLines.Length; i++)
+            {
+                if (mapLines[i].Contains(currentRoom.ToUpper()))
+                {
+                    char[] currentLine=mapLines[i].ToArray();
+                    char[] lineBelow = mapLines[i+1].ToArray();
+                    int pad = Array.IndexOf(currentLine, currentRoom.ToUpper()[2]);
+                    lineBelow[pad] = 'X';
+                    mapLines[i + 1] = new string(lineBelow);
+                }
+            }
+
+            if (currentRoom == "Hall")
+            {
+                char[] HallLine=mapLines[8].ToArray(); 
+                HallLine[11] = 'X';
+                mapLines[8] = new string(HallLine);
+            }
+
+            Console.WriteLine("X shows your current position");
+            Console.WriteLine();
+
+            foreach(string mapLine in mapLines)
+            {
+                Console.WriteLine(mapLine);
+            }
+
+            Console.ReadLine();
+            switch(currentRoom)
+            {
+                case "Dorm": 
+                    Dorm();
+                    break;
+                case "Hall": 
+                    Hall(); 
+                    break;
+                case "Bridge":
+                    Bridge();
+                    break;
+                case "Med": 
+                    Med();
+                    break;
+                case "Storage": 
+                    Storage();
+                    break;
+                case "Airlock": 
+                    AirLock();
+                    break;
+            }
+        }
+
         public static void InventoryMethod(RoomMethod previousRoom)
         {
             Console.Clear();
@@ -214,6 +290,9 @@ namespace AstrophobiaFirst
         //below are all the rooms
         public static void Dorm()
         {
+            string temp = null;
+            currentRoom = "Dorm";
+          
             Console.Clear();
             int userInput;
             string currentRoom = "Dorm";
@@ -225,7 +304,8 @@ namespace AstrophobiaFirst
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory");
+                                  "\n4    Inventory +
+                                  "\n5    Map\n");
 
                 userInput = ValidateUserInput(4);
                 switch (userInput)
@@ -234,7 +314,7 @@ namespace AstrophobiaFirst
                         LookDorm();
                         break;
                     case 2: //Leave
-                        if (currentRoom == "Dorm" && CheckInventory("Torch") == false)
+                        if (currentRoom == "Dorm" && CheckInventory("Torch") == false) 
                         {
                             Console.WriteLine("You cannot see, so you stumble around for a little bit. Making no progress, you may want to see if you can find something to light the way.");
                             Dorm();
@@ -246,6 +326,9 @@ namespace AstrophobiaFirst
                     case 4: //Inventory
                         InventoryMethod(Dorm);
                         break;
+                    case 5:
+                         DisplayMap();
+                         break;
                 }
             }
             
@@ -255,7 +338,8 @@ namespace AstrophobiaFirst
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory\n");
+                                  "\n4    Inventory +
+                                  "\n5    Map\n");
                 
                 userInput = ValidateUserInput(4);
                 switch (userInput)
@@ -273,6 +357,9 @@ namespace AstrophobiaFirst
                     case 4: //Inventory
                         InventoryMethod(Dorm);
                         break;
+                    case 5:
+                        DisplayMap();
+                        break;
                 }
             }
 
@@ -282,7 +369,8 @@ namespace AstrophobiaFirst
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory\n");
+                                  "\n4    Inventory
+                                  "\n5    Map\n");
 
                 userInput = ValidateUserInput(4);
                 switch (userInput)
@@ -300,6 +388,8 @@ namespace AstrophobiaFirst
                     case 4: //Inventory
                         InventoryMethod(Dorm);
                         break;
+                    case 5: //Map
+                        DisplayMap();
                         break;
                 }
             }
@@ -319,7 +409,8 @@ namespace AstrophobiaFirst
                               "\n5    Enter AirLock" +
                               "\n6    Look" +
                               "\n7    Menu" +
-                              "\n8    Inventory\n");
+                              "\n8    Inventory +
+                              "\n9    Map\n");
 
             int userInput;
             userInput = ValidateUserInput(8);
@@ -336,9 +427,9 @@ namespace AstrophobiaFirst
                         Bridge();
                         break;
                     case 3: //Enter Med
-                        if (power == true)
+                        if (power == true) 
                         {
-                            Med();
+                          Med(); 
                         }
                         else
                         {
@@ -380,6 +471,9 @@ namespace AstrophobiaFirst
                     case 8: //Inventory
                         InventoryMethod(Hall);
                         break;
+                    case 9: //Map
+                        DisplayMap();
+                        break;
                 }
             } while (count == 0);
 
@@ -412,7 +506,7 @@ namespace AstrophobiaFirst
         static void Bridge()
         {
             Console.Clear();
-            string currentRoom = "Bridge";
+            currentRoom = "Bridge";
             string temp, playerChoice;
             oxygenLevel = oxygenLevel - 25;
 
@@ -420,7 +514,8 @@ namespace AstrophobiaFirst
             Console.WriteLine("\n1    Look" +
                               "\n2    Ship Stats" +
                               "\n3    Leave" +
-                              "\n4    Menu\n");
+                              "\n4    Menu +
+                              "\n5    Map\n");
 
             int userInput;
             userInput = ValidateUserInput(4);
@@ -440,6 +535,9 @@ namespace AstrophobiaFirst
                 case 4: //Menu
                     IGmenu(ref currentRoom);
                     break;
+                case 5: //Map
+                     DisplayMap();
+                     break;
             }
         }
         static void BridgeIntro()
@@ -473,9 +571,9 @@ namespace AstrophobiaFirst
         static void LookDorm()
         {
             Console.Clear();
-            string temp;
             int dormRoomCount = 1;
-            string currentRoom = "Dorm", playerChoice = null;
+            currentRoom = "Dorm"
+            playerChoice = null;
 
             Console.WriteLine("\nYou have looked around the room");
             if (currentRoom == "Dorm" && CheckInventory("Torch") == false)
@@ -543,7 +641,8 @@ namespace AstrophobiaFirst
                               "\n3    Turn the main power back on" +
                               "\n4    Fix Engines" +
                               "\n5    Fix Oxygen" +
-                              "\n6    Leave\n");
+                              "\n6    Leave +
+                              "\n7     Map\n");
 
             int count = 0;
             int userInput;
@@ -583,6 +682,9 @@ namespace AstrophobiaFirst
                 case 6: //Leave
                     LookBridge();
                     break;
+                case 7: //Map
+                     DisplayMap();
+                     break;
             }
         }
         static void LookHall()
