@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System;
+﻿using System;
 using System.ComponentModel.Design;
-using System.Security.Cryptography.X509Certificates;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace AstrophobiaFirst
 {
@@ -17,7 +17,7 @@ namespace AstrophobiaFirst
         public static bool torch = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentroom = "Dorm";
+        public static string currentRoom = "Dorm";
         public static int dormRoomCount = 0;
 
         static void Main(string[] args)
@@ -120,63 +120,82 @@ namespace AstrophobiaFirst
                     }
             }
         }
-       static void DisplayMap()
+
+        static void DisplayMap()
         {
             string[] mapLines = new string[]
             {
-        "          MMM      ",
-        "         |___|       ",
-        "     __MMMMMMMMM__    ",
-        "    [   |______|  ]   ",
-        "   [    |BRIDGE|   ]  ",
-        "  [     |      |    ] ",
-        "  |-----------------| ",
-        "  |       | | DORM  | ",
-        "  |       | |       | ", 
-        "  |_______| |_______| ",
-        "  |       | | MED   | ",
-        "  |STORAGE| |       | ",
-        "  |       |_|_______| ", 
-        "  |-------     |    | ",
-        "  |    |AIRLOCK|    | ",
-        "  |    |       |    | ",
-        "  |    |-------|    | ",
-        "  A    |       |    A ",
-        " A|||||||||||||||||||A ",
-        "|||A|A|A|||A|||A|A|A||| ",
-        "A||A|A|A|||A|||A|A|A||A "
+                "          MMM         ",
+                "         |___|        ",
+                "     __MMMMMMMMM__    ",
+                "    [   |______|  ]   ",
+                "   [    |BRIDGE|   ]  ",
+                "  [     |      |    ] ",
+                "  |-----------------| ",
+                "  |       | | DORM  | ",
+                "  |       | |       | ", 
+                "  |_______| |_______| ",
+                "  |       | | MED   | ",
+                "  |STORAGE| |       | ",
+                "  |       |_|_______| ", 
+                "  |-------     |    | ",
+                "  |    |AIRLOCK|    | ",
+                "  |    |       |    | ",
+                "  |    |-------|    | ",
+                "  A    |       |    A ",
+                " A|||||||||||||||||||A ",
+                "|||A|A|A|||A|||A|A|A||| ",
+                "A||A|A|A|||A|||A|A|A||A "
             };
+
             for (int i = 0; i < mapLines.Length; i++)
             {
-                if (mapLines[i].Contains(currentroom.ToUpper()))
+                if (mapLines[i].Contains(currentRoom.ToUpper()))
                 {
                     char[] currentLine=mapLines[i].ToArray();
                     char[] lineBelow = mapLines[i+1].ToArray();
-                    int pad = Array.IndexOf(currentLine, currentroom.ToUpper()[2]);
+                    int pad = Array.IndexOf(currentLine, currentRoom.ToUpper()[2]);
                     lineBelow[pad] = 'X';
                     mapLines[i + 1] = new string(lineBelow);
                 }
             }
-            if (currentroom == "Hall")
+
+            if (currentRoom == "Hall")
             {
-                char[] HallLine=mapLines[8].ToArray(); HallLine[11] = 'X';
+                char[] HallLine=mapLines[8].ToArray(); 
+                HallLine[11] = 'X';
                 mapLines[8] = new string(HallLine);
             }
+
             Console.WriteLine("X shows your current position");
             Console.WriteLine();
+
             foreach(string mapLine in mapLines)
             {
                 Console.WriteLine(mapLine);
             }
+
             Console.ReadLine();
-            switch(currentroom)
+            switch(currentRoom)
             {
-                case "Dorm": Dorm();break;
-                case "Hall": Hall(); break;
-                case "Bridge":Bridge();break;
-                case "Med": Med();break;
-                case "Storage": Storage();break;
-                case "Airlock": AirLock();break;
+                case "Dorm": 
+                    Dorm();
+                    break;
+                case "Hall": 
+                    Hall(); 
+                    break;
+                case "Bridge":
+                    Bridge();
+                    break;
+                case "Med": 
+                    Med();
+                    break;
+                case "Storage": 
+                    Storage();
+                    break;
+                case "Airlock": 
+                    AirLock();
+                    break;
             }
         }
 
@@ -185,7 +204,7 @@ namespace AstrophobiaFirst
             Console.WriteLine("Items are stored here");
             //We have yet to use this, maybe a menu function that displays items?
         }
-        static void IGmenu(ref string currentroom)
+        static void IGmenu(ref string currentRoom)
         {
             string Border = new string('*', 42);
             Console.WriteLine();
@@ -212,15 +231,15 @@ namespace AstrophobiaFirst
             switch (Input)
             {
                 case 1:
-                    if (currentroom == "Dorm")
+                    if (currentRoom == "Dorm")
                     {
                         Dorm(   );
                     }
-                    if (currentroom == "Hall")
+                    if (currentRoom == "Hall")
                     {
                         Hall();
                     }
-                    if (currentroom == "Bridge")
+                    if (currentRoom == "Bridge")
                     {
                         Bridge();
                     }
@@ -273,9 +292,9 @@ namespace AstrophobiaFirst
         public static void Dorm()
         {
             string temp = null;
-           currentroom = "Dorm";
+           currentRoom = "Dorm";
             Console.Clear();
-            if (currentroom == "Dorm" && torch == false && dormRoomCount == 0)
+            if (currentRoom == "Dorm" && torch == false && dormRoomCount == 0)
             {
                 Console.WriteLine("You awaken in the dorm and it is dark. Maybe there is something in the room to help you see better.\nWhat would you like to do, your options are:\nLook\nLeave\nMenu\nMap");
                 temp = Console.ReadLine();
@@ -292,7 +311,7 @@ namespace AstrophobiaFirst
                     }
                 case "LEAVE":
                     {
-                        if (currentroom == "Dorm" && torch == false)
+                        if (currentRoom == "Dorm" && torch == false)
                         {
                             Console.WriteLine("You cannot see, so you stumble around for a little bit. Making no progress, you may want to see if you can find something to light the way.");
                             Dorm();
@@ -301,7 +320,7 @@ namespace AstrophobiaFirst
                     }
                 case "MENU":
                     {
-                        IGmenu(ref currentroom);
+                        IGmenu(ref currentRoom);
                         break;
                     }
                 case "MAP":
@@ -310,7 +329,7 @@ namespace AstrophobiaFirst
                         break;
                     }
             }
-            if (currentroom == "Dorm" && torch == true && dormRoomCount == 0)
+            if (currentRoom == "Dorm" && torch == true && dormRoomCount == 0)
             {
                 Console.Clear();
                 Console.WriteLine("You can now see around the room. \nThere are many beds but you seem to be the only one here. \nAre you alone ? \nMaybe you will find answers if you explore outside of the room, \nthrough the door in front of you that seems to lead to a hallway... \nLook\nLeave\nMenu\nInventory\n");
@@ -329,7 +348,7 @@ namespace AstrophobiaFirst
                         break;
                     case "MENU":
                         {
-                            IGmenu(ref currentroom);
+                            IGmenu(ref currentRoom);
                             break;
                         }
                     case "INVENTORY":
@@ -346,7 +365,7 @@ namespace AstrophobiaFirst
                         }
                 }
             }
-            else if (currentroom == "Dorm" && torch == true && dormRoomCount >= 2)
+            else if (currentRoom == "Dorm" && torch == true && dormRoomCount >= 2)
             {
                 Console.Clear();
                 Console.WriteLine("\nYou are in the Dorm \nLook\nLeave\nMenu\n");
@@ -367,7 +386,7 @@ namespace AstrophobiaFirst
                         }
                     case "MENU":
                         {
-                            IGmenu(ref currentroom);
+                            IGmenu(ref currentRoom);
                             break;
                         }
                     case "INVENTORY":
@@ -389,7 +408,7 @@ namespace AstrophobiaFirst
         }
         static void Hall()
         {
-            currentroom = "Hall";
+            currentRoom = "Hall";
             string temp, playerChoice;
             int count = 0;
             Console.Clear();
@@ -468,7 +487,7 @@ namespace AstrophobiaFirst
                         }
                     case "MENU":
                         {
-                            IGmenu(ref currentroom);
+                            IGmenu(ref currentRoom);
                             break;
                         }
                     case "INVENTORY":
@@ -514,7 +533,7 @@ namespace AstrophobiaFirst
         }
         static void Bridge()
         {
-            currentroom = "Bridge";
+            currentRoom = "Bridge";
             string temp, playerChoice;
             oxygenLevel = oxygenLevel - 25;
             Console.Clear();
@@ -547,7 +566,7 @@ namespace AstrophobiaFirst
                     }
                 case "MENU":
                     {
-                        IGmenu(ref currentroom);
+                        IGmenu(ref currentRoom);
                         break;
                     }
                 case "MAP":
@@ -597,10 +616,10 @@ namespace AstrophobiaFirst
         {
             string temp;
             int dormRoomCount = 1;
-            currentroom = "Dorm";string playerChoice = null;
+            currentRoom = "Dorm";string playerChoice = null;
             Console.Clear();
             Console.WriteLine("\nYou have looked around the room");
-            if (currentroom == "Dorm" && torch == false)
+            if (currentRoom == "Dorm" && torch == false)
             {
                 do
                 {
@@ -626,7 +645,7 @@ namespace AstrophobiaFirst
                 } while (temp != "Y");
                 Dorm();
             }
-            else if (currentroom == "Dorm" && torch == true && dormRoomCount > 0)
+            else if (currentRoom == "Dorm" && torch == true && dormRoomCount > 0)
             {
                 torch = true;
                 Console.WriteLine("There is nothing else in the room \nPress any key...");
