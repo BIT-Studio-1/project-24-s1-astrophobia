@@ -291,11 +291,11 @@ namespace AstrophobiaFirst
         public static void Dorm()
         {
             string temp = null;
-            currentRoom = "Dorm";
+            string currentRoom = "Dorm";
           
             Console.Clear();
             int userInput;
-            string currentRoom = "Dorm";
+          
 
             if (currentRoom == "Dorm" && CheckInventory("Torch") == false && dormRoomCount == 0)
             {
@@ -573,7 +573,7 @@ namespace AstrophobiaFirst
             Console.Clear();
             int dormRoomCount = 1;
             currentRoom = "Dorm";
-            playerChoice = null;
+            string playerChoice = null;
 
             Console.WriteLine("\nYou have looked around the room");
             if (currentRoom == "Dorm" && CheckInventory("Torch") == false)
