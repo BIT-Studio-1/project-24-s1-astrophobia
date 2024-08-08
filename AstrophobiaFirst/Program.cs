@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Reflection;
 using System.Globalization;
 using System.Threading;
+
 
 namespace AstrophobiaFirst
 {
@@ -36,8 +38,10 @@ namespace AstrophobiaFirst
         static void Mainmenu()
         {
             Console.Clear();
-            Console.WriteLine("   __    ___  ____  ____  _____  ____  _   _  _____  ____  ____    __   \r\n  /__\\  / __)(_  _)(  _ \\(  _  )(  _ \\( )_( )(  _  )(  _ \\(_  _)  /__\\  \r\n /(__)\\ \\__ \\  )(   )   / )(_)(  )___/ ) _ (  )(_)(  ) _ < _)(_  /(__)\\ \r\n(__)(__)(___/ (__) (_)\\_)(_____)(__)  (_) (_)(_____)(____/(____)(__)(__)\n");
-            Console.WriteLine("        ~+                                    \r\n                                              \r\n                 *       +               .'.  \r\n           '                  |          |o|  \r\n       ()    .-.,=\"``\"=.    - o -       .'o'. \r\n             '=/_       \\     |         |.-.| \r\n          *   |  '=._    |              '   ' \r\n               \\     `=./`,        '     ( )  \r\n            .   '=.__.=' `='      *       )   \r\n   +                         +           ( )  \r\n        O      *        '       .             \n");
+            String logo = "   __    ___  ____  ____  _____  ____  _   _  _____  ____  ____    __   \r\n  /__\\  / __)(_  _)(  _ \\(  _  )(  _ \\( )_( )(  _  )(  _ \\(_  _)  /__\\  \r\n /(__)\\ \\__ \\  )(   )   / )(_)(  )___/ ) _ (  )(_)(  ) _ < _)(_  /(__)\\ \r\n(__)(__)(___/ (__) (_)\\_)(_____)(__)  (_) (_)(_____)(____/(____)(__)(__)\n"
+             + "        ~+                                    \r\n                                              \r\n                 *       +               .'.  \r\n           '                  |          |o|  \r\n       ()    .-.,=\"``\"=.    - o -       .'o'. \r\n             '=/_       \\     |         |.-.| \r\n          *   |  '=._    |              '   ' \r\n               \\     `=./`,        '     ( )  \r\n            .   '=.__.=' `='      *       )   \r\n   +                         +           ( )  \r\n        O      *        '       .             \n";
+            ScrollText(logo);
+            Thread.Sleep(700);
             Console.WriteLine("\n1    Play" +
                               "\n2    Help" +
                               "\n3    Options" +
@@ -60,9 +64,8 @@ namespace AstrophobiaFirst
                     GameEnd();
                     break;
             }
-
-
         }
+
         static void Help()
         {
             Console.Clear();
@@ -1136,6 +1139,26 @@ namespace AstrophobiaFirst
             }
 
             return userInput;
+        }
+
+        private static void ScrollText(String text)
+        {
+
+            String[] TextSplit = text.Split("\n");
+
+            for (int i = TextSplit.Length - 1; i > 0; i--)
+            {
+
+                Console.Clear();
+
+                for (int j = i; j < TextSplit.Length; j++)
+                {
+                    Console.WriteLine(TextSplit[j]);
+                }
+
+                Thread.Sleep(10);
+
+            }
         }
     } 
 } 
