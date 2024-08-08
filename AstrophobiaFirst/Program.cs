@@ -1,24 +1,34 @@
-﻿
-using System.Threading;
-using System;
+﻿using System;
 using System.ComponentModel.Design;
-using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
+using System.Globalization;
+using System.Threading;
+
 
 namespace AstrophobiaFirst
 {
     internal class Program
     {
+        public delegate void RoomMethod(); //Allows player to return the the room they were in before opening the menu.
+
+        public struct Item //Qualities of the item
+        {
+            public string Name;
+            public string Description;
+            public int Quant;
+        }
+     
+        public static List <Item> Inventory = new List <Item> ();//Inventory list that is added to with each new item.
+
         public static bool
                 Comms = false,
                 Thrusters = false,
                 Reactor = false,
                 ShipAi = false;
         public static bool power = false;
-        public static bool torch = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentroom = "\0";
+        public static string currentRoom = "Dorm";
         public static int dormRoomCount = 0;
 
         static void Main(string[] args)
@@ -76,7 +86,7 @@ namespace AstrophobiaFirst
                     Console.WriteLine("\nlook: This command is used to look around the room you are currently in, to help you with your surroundings, \nit may also show any items found in said room.");
                     Console.WriteLine("\nleave: Used to leave the current room you are in, assuming said room is linked to the hallway.");
                     Console.WriteLine("\nTo pick up any items that can be found in the room you are currently in, you will likely answer in yes or no. \nYou will also have to write which slot the item fills.");
-                    Console.WriteLine("\nmenu: this command will bring up up the ingame menu, and with it, a few more options for the player, \nsuch as restarting exiting the game, going to the main menu etc...");
+                    Console.WriteLine("\nmenu: this command will bring up the ingame menu, and with it, a few more options for the player, \nsuch as restarting exiting the game, going to the main menu etc...");
                     Console.WriteLine("\nUse a rooms name while in the hallway to go to the room you have typed (e.g. typing dorm goes to the Dorm room).");
                     Console.WriteLine("\ninventory: This is used to access your inventory and see what slots are free and full.");
                     Console.WriteLine("\nskip: This is used to skip any story if you don't want to read or you have already read.");
@@ -98,16 +108,115 @@ namespace AstrophobiaFirst
                     Help();
                     break;
                 default:
-                    Console.Clear();
-                    Mainmenu();
+                    {
+                        Console.Clear();
+                        Mainmenu();
+                        break;
+                    }
+            }
+        }
+
+        static void DisplayMap()
+        {
+            string[] mapLines = new string[]
+            {
+                "          MMM         ",
+                "         |___|        ",
+                "     __MMMMMMMMM__    ",
+                "    [   |______|  ]   ",
+                "   [    |BRIDGE|   ]  ",
+                "  [     |      |    ] ",
+                "  |-----------------| ",
+                "  |       | | DORM  | ",
+                "  |       | |       | ", 
+                "  |_______| |_______| ",
+                "  |       | | MED   | ",
+                "  |STORAGE| |       | ",
+                "  |       |_|_______| ", 
+                "  |-------     |    | ",
+                "  |    |AIRLOCK|    | ",
+                "  |    |       |    | ",
+                "  |    |-------|    | ",
+                "  A    |       |    A ",
+                " A|||||||||||||||||||A ",
+                "|||A|A|A|||A|||A|A|A||| ",
+                "A||A|A|A|||A|||A|A|A||A "
+            };
+
+            for (int i = 0; i < mapLines.Length; i++)
+            {
+                if (mapLines[i].Contains(currentRoom.ToUpper()))
+                {
+                    char[] currentLine=mapLines[i].ToArray();
+                    char[] lineBelow = mapLines[i+1].ToArray();
+                    int pad = Array.IndexOf(currentLine, currentRoom.ToUpper()[2]);
+                    lineBelow[pad] = 'X';
+                    mapLines[i + 1] = new string(lineBelow);
+                }
+            }
+
+            if (currentRoom == "Hall")
+            {
+                char[] HallLine=mapLines[8].ToArray(); 
+                HallLine[11] = 'X';
+                mapLines[8] = new string(HallLine);
+            }
+
+            Console.WriteLine("X shows your current position");
+            Console.WriteLine();
+
+            foreach(string mapLine in mapLines)
+            {
+                Console.WriteLine(mapLine);
+            }
+
+            Console.ReadLine();
+            switch(currentRoom)
+            {
+                case "Dorm": 
+                    Dorm();
+                    break;
+                case "Hall": 
+                    Hall(); 
+                    break;
+                case "Bridge":
+                    Bridge();
+                    break;
+                case "Med": 
+                    Med();
+                    break;
+                case "Storage": 
+                    Storage();
+                    break;
+                case "Airlock": 
+                    AirLock();
                     break;
             }
         }
-        public static void Inventory()
+
+        public static void InventoryMethod(RoomMethod previousRoom)
         {
-            Console.WriteLine("Items are stored here");
-            //We have yet to use this, maybe a menu function that displays items?
+            Console.Clear();
+            Console.WriteLine("You open your bag;\n");
+            foreach (var Item in Inventory)//Displays each inventory item in a readable format
+            {
+                Console.WriteLine($"{Item.Name} - x{Item.Quant}\n   {Item.Description}\n");
+
+            }
+
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadLine();
+            Console.Clear();
+            previousRoom();
         }
+
+        public static bool CheckInventory(string item)
+        {
+            Console.Clear();
+            bool itemFound = Inventory.Any(Item => Item.Name == "Torch");
+            return itemFound;
+        }
+
         static void IGmenu(ref string currentRoom)
         {
             string Border = new string('*', 42);
@@ -151,7 +260,7 @@ namespace AstrophobiaFirst
         static void Intro()
         {
 
-            string playerChoice;
+            string? playerChoice;
 
             Console.Clear();
             Console.WriteLine("There is a little bit of story, type skip if you wish to skip it, otherwise just hit enter to begin...");
@@ -163,16 +272,17 @@ namespace AstrophobiaFirst
                 case "SKIP":
                     {
                         Console.WriteLine("You have Chosen to skip, skipping...");
-                        Thread.Sleep(1500);
+                        Thread.Sleep(15000);
                         Console.Clear();
                         Dorm();
                         break;
                     }
                 default:
                     {
-                        Console.WriteLine("This story takes place in the year 2197, humanity has advanced to and beyond the stars, developing FTL engines \n(Faster Than Light) And, as humanity does, it used this technology to expand their territory.\nTo give themselves places to go, to get away from Earth. Which, at the time was breaching a population of over \n50 billion. Earth alone was far from enough to sustain this population, and so many fled abord vast ships, heading for \nfaraway planets, for a second chance at life. You, happened to be aboard on of these ships...");
+                        Console.WriteLine("This story takes place in the year 2197, humanity has advanced to and beyond the stars, developing FTL engines \n(Faster Than Light) And, as humanity does, it used this technology to expand their territory.\nTo give themselves places to go, to get away from Earth. Which, at the time was breaching a population of over \n50 billion. Earth alone was far from enough to sustain this population, and so many fled aboard vast ships, heading for \nfaraway planets, for a second chance at life. You, happened to be aboard on of these ships...");
                         Console.WriteLine("Hit Enter to Begin...");
                         Console.ReadLine();
+                        Console.Clear();
                         Dorm();
                         break;
                     }
@@ -183,26 +293,31 @@ namespace AstrophobiaFirst
         //below are all the rooms
         public static void Dorm()
         {
-            int userInput;
+            string temp = null;
             string currentRoom = "Dorm";
+          
+            Console.Clear();
+            int userInput;
+          
 
-            if (currentRoom == "Dorm" && torch == false && dormRoomCount == 0)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == false && dormRoomCount == 0)
             {
                 Console.WriteLine("You awaken in the dorm and it is dark. Maybe there is something in the room to help you see better." +
                     "\nWhat would you like to do, your options are:");
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory");
+                                  "\n4    Inventory" +
+                                  "\n5    Map\n");
 
-                userInput = ValidateUserInput(4);
+                userInput = ValidateUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
                         LookDorm();
                         break;
                     case 2: //Leave
-                        if (currentRoom == "Dorm" && torch == false)
+                        if (currentRoom == "Dorm" && CheckInventory("Torch") == false) 
                         {
                             Console.WriteLine("You cannot see, so you stumble around for a little bit. Making no progress, you may want to see if you can find something to light the way.");
                             Dorm();
@@ -212,22 +327,24 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 4: //Inventory
-                        Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                        Console.ReadLine();
-                        Dorm();
+                        InventoryMethod(Dorm);
                         break;
+                    case 5:
+                         DisplayMap();
+                         break;
                 }
             }
             
-            if (currentRoom == "Dorm" && torch == true && dormRoomCount == 0)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == true && dormRoomCount == 0)
             {
                 Console.WriteLine("You can now see around the room. \nThere are many beds but you seem to be the only one here. \nAre you alone ? \nMaybe you will find answers if you explore outside of the room, \nthrough the door in front of you that seems to lead to a hallway... ");
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory\n");
+                                  "\n4    Inventory" +
+                                  "\n5    Map\n");
                 
-                userInput = ValidateUserInput(4);
+                userInput = ValidateUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -241,22 +358,24 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 4: //Inventory
-                        Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                        Console.ReadLine();
-                        Dorm();
+                        InventoryMethod(Dorm);
+                        break;
+                    case 5:
+                        DisplayMap();
                         break;
                 }
             }
 
-            if (currentRoom == "Dorm" && torch == true && dormRoomCount >= 2)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == true && dormRoomCount >= 2)
             {
                 Console.WriteLine("\nYou are in the Dorm");
                 Console.WriteLine("\n1    Look" +
                                   "\n2    Leave" +
                                   "\n3    Menu" +
-                                  "\n4    Inventory\n");
+                                  "\n4    Inventory" +
+                                  "\n5    Map\n");
 
-                userInput = ValidateUserInput(4);
+                userInput = ValidateUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -270,16 +389,18 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 4: //Inventory
-                        Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                        Console.ReadLine();
-                        Dorm();
+                        InventoryMethod(Dorm);
+                        break;
+                    case 5: //Map
+                        DisplayMap();
                         break;
                 }
             }
         }
         static void Hall()
         {
-            string currentRoom = "Hall";
+            Console.Clear();
+            currentRoom = "Hall";
             int count = 0;
 
             oxygenLevel = oxygenLevel - 25;
@@ -291,10 +412,11 @@ namespace AstrophobiaFirst
                               "\n5    Enter AirLock" +
                               "\n6    Look" +
                               "\n7    Menu" +
-                              "\n8    Inventory\n");
+                              "\n8    Inventory" +
+                              "\n9    Map\n");
 
             int userInput;
-            userInput = ValidateUserInput(8);
+            userInput = ValidateUserInput(9);
 
             do
             {
@@ -308,9 +430,9 @@ namespace AstrophobiaFirst
                         Bridge();
                         break;
                     case 3: //Enter Med
-                        if (power == true)
+                        if (power == true) 
                         {
-                            Med();
+                          Med(); 
                         }
                         else
                         {
@@ -350,9 +472,10 @@ namespace AstrophobiaFirst
                         IGmenu(ref currentRoom);
                         break;
                     case 8: //Inventory
-                        Console.WriteLine("Your trusty torch is all you need...(Press any Key)");
-                        Console.ReadLine();
-                        Hall();
+                        InventoryMethod(Hall);
+                        break;
+                    case 9: //Map
+                        DisplayMap();
                         break;
                 }
             } while (count == 0);
@@ -361,6 +484,7 @@ namespace AstrophobiaFirst
         }
         static void Med()
         {
+            Console.Clear();
             Console.WriteLine("You are in Med");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
@@ -368,6 +492,7 @@ namespace AstrophobiaFirst
         }
         static void Storage()
         {
+            Console.Clear();
             Console.WriteLine("You are in Storage");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
@@ -375,14 +500,16 @@ namespace AstrophobiaFirst
         }
         static void AirLock()
         {
-            Console.WriteLine("You are in AirLock");
+            Console.Clear();
+            Console.WriteLine("You are in the AirLock");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
             Hall();
         }
         static void Bridge()
         {
-            string currentRoom = "Bridge";
+            Console.Clear();
+            currentRoom = "Bridge";
             string temp, playerChoice;
             oxygenLevel = oxygenLevel - 25;
 
@@ -390,10 +517,11 @@ namespace AstrophobiaFirst
             Console.WriteLine("\n1    Look" +
                               "\n2    Ship Stats" +
                               "\n3    Leave" +
-                              "\n4    Menu\n");
+                              "\n4    Menu" +
+                              "\n5    Map\n");
 
             int userInput;
-            userInput = ValidateUserInput(4);
+            userInput = ValidateUserInput(5);
             switch (userInput)
             {
                 case 1: //Look
@@ -410,6 +538,9 @@ namespace AstrophobiaFirst
                 case 4: //Menu
                     IGmenu(ref currentRoom);
                     break;
+                case 5: //Map
+                     DisplayMap();
+                     break;
             }
         }
         static void BridgeIntro()
@@ -442,12 +573,13 @@ namespace AstrophobiaFirst
         //Below this are all the "LOOK" methods.
         static void LookDorm()
         {
-            string temp;
+            Console.Clear();
             int dormRoomCount = 1;
-            string currentRoom = "Dorm", playerChoice = null;
+            currentRoom = "Dorm";
+            string playerChoice = null;
 
             Console.WriteLine("\nYou have looked around the room");
-            if (currentRoom == "Dorm" && torch == false)
+            if (currentRoom == "Dorm" && CheckInventory("Torch") == false)
             {
                 Console.WriteLine("It is very dark in the dorm, but you manage notice a torch lying on the ground next to you, do you pick it up?");
                 Console.WriteLine("\n1    Yes" +
@@ -458,8 +590,14 @@ namespace AstrophobiaFirst
                 switch (userInput)
                 {
                     case 1: //Yes
-                        torch = true;
                         Console.WriteLine("\nYou pick up the torch...(Press any Key)\n");
+                       
+                            Item torchItem; //This adds a torch to the inventory, there may be a simpler way however.
+                            torchItem.Name = "Torch";
+                            torchItem.Description = "A device for finding your way in the dark.";
+                            torchItem.Quant = 1;
+                            Inventory.Add(torchItem);
+                        Console.ReadLine();
                         break;
                     case 2: //No
                         Console.WriteLine("\nYou decided not to pick up the torch, But you still cannot see.\nMaybe it would be better to pick it up...");
@@ -470,9 +608,8 @@ namespace AstrophobiaFirst
 
                 Dorm();
             }
-            else if (currentRoom == "Dorm" && torch == true && dormRoomCount > 0)
+            else if (currentRoom == "Dorm" && CheckInventory("Torch") == true && dormRoomCount > 0)
             {
-                torch = true;
                 Console.WriteLine("There is nothing else in the room \nPress any key...");
                 dormRoomCount++;
                 Console.ReadLine();
@@ -481,6 +618,7 @@ namespace AstrophobiaFirst
         }
         static void LookBridge()
         {
+            Console.Clear();
             Console.WriteLine("In front of you to your left and right are the two pilot seats, various buttons and knobs in front of each. To your left is a computer console displaying the ship's status. To your right are a few more consoles with flashing ERROR screens. \nYou spot a manual on the controls to your left. \nWhat would you like to do?");
             Console.WriteLine("\n1    Check computer" +
                               "\n2    Stop looking\n");
@@ -499,17 +637,19 @@ namespace AstrophobiaFirst
         }
         static void ShipComputer()
         {
+            Console.Clear();
             Console.WriteLine("You look over at the computer console, there are a couple things you can do here.");
             Console.WriteLine("\n1    Check oxygen levels and reactor core fuel" +
                               "\n2    Check ship health" +
                               "\n3    Turn the main power back on" +
                               "\n4    Fix Engines" +
                               "\n5    Fix Oxygen" +
-                              "\n6    Leave\n");
+                              "\n6    Leave" +
+                              "\n7     Map\n");
 
             int count = 0;
             int userInput;
-            userInput = ValidateUserInput(6);   
+            userInput = ValidateUserInput(7);   
             switch (userInput)
             {
                 case 1: //Check Oxygen and Reactor Core Fuel
@@ -545,10 +685,14 @@ namespace AstrophobiaFirst
                 case 6: //Leave
                     LookBridge();
                     break;
+                case 7: //Map
+                     DisplayMap();
+                     break;
             }
         }
         static void LookHall()
         {
+            Console.Clear();
             int dormRoomCount = 1;
             Console.WriteLine("\nThe ship is on backup power and some of the doors seem to be locked shut, maybe if you get the main power back on they'll open.");
             Console.ReadLine();
@@ -556,6 +700,7 @@ namespace AstrophobiaFirst
         }
         static void ShipStats()
         {
+            Console.Clear();
             string Border = new string('*', 25);
 
             Thread.Sleep(100);
@@ -574,6 +719,7 @@ namespace AstrophobiaFirst
         // ShipSystems status window
         static void ShipSystems()
         {
+            Console.Clear(); 
             string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
 
             Console.WriteLine(Border);
@@ -624,6 +770,7 @@ namespace AstrophobiaFirst
         //Task 1 is for within the bridge/within the main computer
         public static void Task1()
         {
+            Console.Clear();
             Random rand = new Random();
             int[] numbers = new int[7];
             int[] user = new int[7];
@@ -647,7 +794,7 @@ namespace AstrophobiaFirst
             {
                 comp = rand.Next(1, 10);
                 numbers[i] = comp;
-                Console.WriteLine($"{comp}");
+                Console.WriteLine(comp);
             }
             Thread.Sleep(2000);
             Console.Clear();
@@ -719,6 +866,7 @@ namespace AstrophobiaFirst
 
             do
             {
+                Console.Clear();
                 Round++;
                 if (Round > 5)
                 {
@@ -923,7 +1071,7 @@ namespace AstrophobiaFirst
         }
         public static void Win1(ref string[] inventory)
         {
-            bool torch = true;
+            
             Console.Clear();
             Console.WriteLine(".");
             Thread.Sleep(250);
