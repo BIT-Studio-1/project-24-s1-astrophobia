@@ -137,6 +137,21 @@ namespace AstrophobiaFirst
             bool itemFound = Inventory.Any(Item => Item.Name == "Torch");
             return itemFound;
         }
+        static void restartGame()
+        {
+            Console.Clear();
+            Comms = false;
+            Thrusters = false;
+            Reactor = false;
+            ShipAi = false;
+            power = false;
+            oxygenLevel = 999;
+            reactorCore = 150;
+            currentroom = "\0";
+            dormRoomCount = 0;
+            Inventory.Clear();
+            Intro();
+        }
 
         static void IGmenu(ref string currentRoom)
         {
@@ -166,7 +181,7 @@ namespace AstrophobiaFirst
                     }
                     break;
                 case 2: //Restart
-                    Intro();
+                    restartGame();
                     break;
                 case 3: //Main Menu
                     Mainmenu();
