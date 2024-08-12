@@ -22,8 +22,7 @@ namespace AstrophobiaFirst
         public static int dormRoomCount = 0;
         public static int playerHP = 100, enemyHP = 100;
         static void Main(string[] args)
-        {
-            Combat();
+        {           
             Mainmenu();
         }
         static void Mainmenu()
@@ -921,6 +920,31 @@ namespace AstrophobiaFirst
                     break;
             }
         }
+        public static void lose3()
+        {
+            Console.WriteLine("\n\nYou thought you could escape did you ?");
+            Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("Well you failed miserably");
+            Thread.Sleep(2000);
+            Console.Clear();
+            Console.WriteLine("Achievement unlocked - Dicked by the enemy while trying to escape\n  -Failed the game embarrassingly");
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
+            {
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
+            }
+        }
         public static void Win1(ref string[] inventory)
         {
             bool torch = true;
@@ -964,76 +988,77 @@ namespace AstrophobiaFirst
         {
             while (enemyHP > 0 && playerHP > 0)
             {
-                string Border = new string('=', 44), blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
-                Console.WriteLine(Border);
-                Console.Write("+");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($"  Player +{playerHP}".PadRight(31));
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write($"Enemy +{enemyHP} ".PadRight(0));
-                Console.ResetColor();
-                Console.WriteLine("+\n+".PadRight(45) + "+");
-                Console.WriteLine($"{blank}\n{blank}\n{blank}");
-                Console.WriteLine($"+  (1) Punch{T}+\n+  (2) Kick{T}+\n+  (3) Tackle{T}+\n+  (4) Run{T}+");
-
-                Console.WriteLine(Border);                
+                cPrint();
                 Random rand = new Random();
-                int dodge = rand.Next(1, 101);
-                int counter = rand.Next(1, 101);
+                int escape = rand.Next(playerHP, 101);
+                int dodge = rand.Next(1, 101), counter = rand.Next(1, 101);
+                Console.Write($"Enter here: ");
                 int action = Convert.ToInt16(Console.ReadLine());
-
-                // Enemy attack(counter) chance will be based on your previous attack choice
+                Console.WriteLine();               
+                // Enemy attack(counter) chance will be based on your attack choice
                 switch (action)
                 {
                     case 1: if (dodge > 70) // Punch 70% chance enemy will dodge                      
                         {
                             enemyHP -= 15;
-                            Console.WriteLine("You punch the enemy for 15 damage");
+                            Console.WriteLine("You punch the enemy for 15 damage\n");                            
+                            Console.Beep(900, 80);
                         }
-                        else Console.WriteLine("You missed");
-                        
-                        if (counter > 70)
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 70) // Enemys next attack chance based from punch attack
                         {
                             playerHP -= 10;
                             Console.WriteLine("Enemy bites you for 10 damage");
+                            Console.Beep(500, 200);                           
                         }
                         else Console.WriteLine("Enemy attacks but they missed");
                         break;
                     case 2: if (dodge > 35) // Kick 65% chance enemy will dodge                     
                         {
                             enemyHP -= 30;
-                            Console.WriteLine("You kick the enemy for 30 damage");
+                            Console.WriteLine("You kick the enemy for 30 damage\n");                           
+                            Console.Beep(900, 80);
                         }
-                        else Console.WriteLine("You missed");
-                        if (counter > 35)
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 35) // 65% chance they will hit you on next attack
                         {
                             playerHP -= 15;
                             Console.WriteLine("Enemy slashes you for 15 damage");
+                            Console.Beep(500, 200);
                         }
+                        else Console.WriteLine("Enemy attacks but they missed");
                         break;
                     case 3: if (dodge > 50) // Tackle 50% chance enemy will dodge 
                         {
                             enemyHP -= 35;
-                            Console.WriteLine("You tackle the enemy for 35 damage");
+                            Console.WriteLine("You tackle the enemy for 35 damage\n");                            
+                            Console.Beep(900, 80);
                         }
-                        else Console.WriteLine("You missed");
-                        if (counter > 60)
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 60) // 40% chance they will hit you
                         {
                             playerHP -= 20;
                             Console.WriteLine("Enemy tears at you and you take 20 damage");
+                            Console.Beep(500, 200);
                         }
+                        else Console.WriteLine("Enemy tried to grab you but failed");
                         break;
-                        
+                    default: if (escape > enemyHP)
+                            Console.WriteLine("You got away (for now) Lucky...");
+                        else
+                            lose3();
+                        break;                       
                 }               
                 Console.ReadLine();
                 Console.WriteLine("Press enter");
                 Console.Clear();
-            }
-            Console.WriteLine(enemyHP);
-            Console.WriteLine(playerHP);
+            }            
             if (enemyHP <= 0)
             {
-                Console.WriteLine("You have slain your enemy");
+                Console.WriteLine("You have slain your enemy...\n\nItem recieved - { MedRoom Key }");
                 Console.ReadLine();
             }
             else if (playerHP <= 0)
@@ -1041,7 +1066,24 @@ namespace AstrophobiaFirst
                 Console.WriteLine("You have died");
                 Console.ReadLine();
             }
-        }       
+        } 
+        public static void cPrint()
+        {
+            Random rand = new Random();            
+            int escape = rand.Next(playerHP, 101);
+            string Border = new string('=', 44), blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
+            Console.WriteLine(Border);
+            Console.Write("+");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"  Player +{playerHP}".PadRight(31));
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write($"Enemy +{enemyHP} ".PadRight(0));
+            Console.ResetColor();
+            Console.WriteLine("+\n+".PadRight(45) + "+");
+            Console.WriteLine($"{blank}\n{blank}\n{blank}");
+            Console.WriteLine($"+  (1) Punch{T}+\n+  (2) Kick{T}+\n+  (3) Tackle{T}+\n+  (4) Escape {escape}% \t\t\t   +");
+            Console.WriteLine(Border);
+        }
         static void GameEnd()
         {
             Console.WriteLine("You have chosen to exit the game");
