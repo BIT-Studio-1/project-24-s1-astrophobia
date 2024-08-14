@@ -22,7 +22,8 @@ namespace AstrophobiaFirst
         public static int dormRoomCount = 0;
         public static int playerHP = 100, enemyHP = 100;
         static void Main(string[] args)
-        {           
+        {
+            Combat();
             Mainmenu();
         }
         static void Mainmenu()
