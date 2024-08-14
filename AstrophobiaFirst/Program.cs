@@ -33,7 +33,7 @@ namespace AstrophobiaFirst
 
         static void Main(string[] args)
         {
-            Task2();
+            Task3();
             Mainmenu();
         }
         static void Mainmenu()
@@ -1090,8 +1090,6 @@ namespace AstrophobiaFirst
                 default:
                     Console.WriteLine("Invalid input.");
                     Thread.Sleep(1000);
-                    Console.Clear();
-                    Lose2();
                     break;
             }
         }
