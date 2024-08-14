@@ -33,6 +33,7 @@ namespace AstrophobiaFirst
 
         static void Main(string[] args)
         {
+            Task2();
             Mainmenu();
         }
         static void Mainmenu()
@@ -871,16 +872,19 @@ namespace AstrophobiaFirst
         //Task 2 is for Engine/operation room once added
         public static void Task2()
         {
-            int Round = 3;
+            int Round = 2;
             int Correct = 0;
+            bool win = false;
             string Q1 = "V2ROCKET";
             string Q2 = "311";
             string Q3 = "SATURN";
             string Q4 = "VENUS";
             string Q5 = "1969";
+            
 
             do
             {
+                Correct = 0;
                 Console.Clear();
                 Round++;
                 if (Round > 5)
@@ -966,13 +970,20 @@ namespace AstrophobiaFirst
                         Correct++;
                     }
                 }
-
+                if (Correct >= Round) win = true;
+                if (win == true)
+                {
+                    Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
+                    reactorCore = reactorCore + 200;
+                    Thread.Sleep(2000);
+                    Console.ReadLine();
+                }
 
             } while ((Correct != Round) && (Correct < Round));
-            Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
-            reactorCore = reactorCore + 200;
-            Thread.Sleep(2000);
-            Console.ReadLine();
+                
+               
+            
+           
         }
         //Task 3 is for in the oxygen room once that has been made
         public static void Task3()
@@ -1062,25 +1073,25 @@ namespace AstrophobiaFirst
         public static void Lose2()
         {
             Console.WriteLine("\n\nYou got stuck in the thruster, there is no escape.");
-            Console.ReadLine();
-            Console.Clear();
             Console.WriteLine("You feel your body being torn apart...");
             Thread.Sleep(2000);
             Console.Clear();
             Console.WriteLine("Achievement unlocked - Blown away\n  -Failed the game gruesomely");
-            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
-            string temp = Console.ReadLine();
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? \n1. Yes \n2. No  ");
+            int temp = Convert.ToInt32(Console.ReadLine());
             switch (temp)
             {
-                case "y":
-                case "Y":
+                case 1:
                     Mainmenu();
                     break;
-                case "n":
-                case "N":
+                case 2:
                     GameEnd();
                     break;
                 default:
+                    Console.WriteLine("Invalid input.");
+                    Thread.Sleep(1000);
+                    Console.Clear();
+                    Lose2();
                     break;
             }
         }
