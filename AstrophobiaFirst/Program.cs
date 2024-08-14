@@ -28,8 +28,9 @@ namespace AstrophobiaFirst
         public static bool power = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentRoom = "Dorm";
+        public static string currentRoom = "Bridge";
         public static int dormRoomCount = 0;
+
 
         static void Main(string[] args)
         {
@@ -226,7 +227,7 @@ namespace AstrophobiaFirst
             power = false;
             oxygenLevel = 999;
             reactorCore = 150;
-            currentroom = "\0";
+            currentRoom = "\0";
             dormRoomCount = 0;
             Inventory.Clear();
             Intro();
@@ -271,6 +272,21 @@ namespace AstrophobiaFirst
             }
         }
         //The methods below are all the rooms that will be found in this game.
+
+        public static void randomEventBridge()
+        {
+                    Random rand = new Random();
+                    int num = rand.Next(2);
+                    if (num == 1)
+                    {
+                        Console.WriteLine("Oh no! You enter the bridge and you see a fire has started, you quickly grab the extinguisher and put it out but the oxygen supply is damaged and depleting fast you'll have to fix it quick or you're doomed!");
+                        Console.ReadLine();
+                    }
+        }
+        public static void bridgeEventGame()
+        {
+            
+        }
 
         static void Intro()
         {
@@ -442,6 +458,7 @@ namespace AstrophobiaFirst
                         Dorm();
                         break;
                     case 2: //Enter Bridge
+                        randomEventBridge();
                         Bridge();
                         break;
                     case 3: //Enter Med
@@ -527,7 +544,7 @@ namespace AstrophobiaFirst
             currentRoom = "Bridge";
             string temp, playerChoice;
             oxygenLevel = oxygenLevel - 25;
-
+            randomEventBridge();
             Console.WriteLine("\nYou are in the bridge, the brain of the ship where messages are received and commands are sent throughout the rest of the vessel. There seems to be power in here as some computer lights flicker and there are beeping noises all around, it seems some parts of the ship are still working. Just like the dorm room and the hallway, the thick layer of dust on all of the controls would indicate that has not been any life here for quite some time. \nAre you truly alone floating through space... \nYour options are:");
             Console.WriteLine("\n1    Look" +
                               "\n2    Ship Stats" +
