@@ -985,13 +985,13 @@ namespace AstrophobiaFirst
             // Rooms not yet in game or may not be needed - Med, Reactor, Storage, Airlock
         }
         // Combat system to be used throughout
-        public static void Combat()
+        public static void Combat(ref int escape)
         {
             while (enemyHP > 0 && playerHP > 0)
             {
-                cPrint();
+                cPrint(ref int 100);
                 Random rand = new Random();
-                int escape = rand.Next(playerHP, 101);
+                int escape = rand.Next(playerHP, playerHP+15);
                 int dodge = rand.Next(1, 101), counter = rand.Next(1, 101);
                 Console.Write($"Enter here: ");
                 int action = Convert.ToInt16(Console.ReadLine());
@@ -1047,11 +1047,13 @@ namespace AstrophobiaFirst
                         }
                         else Console.WriteLine("Enemy tried to grab you but failed");
                         break;
-                    default: if (escape > enemyHP)
+                    case 4: if (escape > enemyHP)
                             Console.WriteLine("You got away (for now) Lucky...");
                         else
                             lose3();
-                        break;                       
+                        break;
+                    default: Console.WriteLine("Incorrect input");
+                        break;
                 }               
                 Console.ReadLine();
                 Console.WriteLine("Press enter");
@@ -1068,10 +1070,10 @@ namespace AstrophobiaFirst
                 Console.ReadLine();
             }
         } 
-        public static void cPrint()
+        public static void cPrint(ref int escape)
         {
             Random rand = new Random();            
-            int escape = rand.Next(playerHP, 101);
+            //int escape = rand.Next(playerHP, 101);
             string Border = new string('=', 44), blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
             Console.WriteLine(Border);
             Console.Write("+");
