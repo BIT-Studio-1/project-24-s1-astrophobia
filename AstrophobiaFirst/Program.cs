@@ -417,7 +417,7 @@ namespace AstrophobiaFirst
             Console.Clear();
             currentRoom = "Hall";
             int count = 0;
-
+            Console.Clear();
             oxygenLevel = oxygenLevel - 25;
             Console.WriteLine("\nYou are in the hallway, most of the rooms are shut except for the dorm and the bridge down the end of the hallway. You could go in there or you could go back into the dorm.\nYour options are:");
             Console.WriteLine("\n1    Enter Dorm" +
@@ -560,6 +560,7 @@ namespace AstrophobiaFirst
         }
         static void BridgeIntro()
         {
+            Console.Clear();
             bool BridgeIntro = false;
             if (BridgeIntro == false)
             {
@@ -734,52 +735,39 @@ namespace AstrophobiaFirst
         // ShipSystems status window
         static void ShipSystems()
         {
-            Console.Clear(); 
-            string LRC, Thrust, Core, Ai, A = "Active", D = "Disabled", Border = new string('-', 44);
-
+            string Border = new string('-', 44);
+            List<bool> components = new List<bool>();           
+            string[] cNames = { "Long Ranged Comms", "Thrusters", "Reactor Core", "Ai Systems" };
+            string A = "Active", D = "Disabled";
+            
             Console.WriteLine(Border);
-            if (Comms == true)
-                LRC = A;
-            else
-                LRC = D;
-            if (Thrusters == true)
-                Thrust = A;
-            else
-                Thrust = D;
-            if (Reactor == true)
-                Core = A;
-            else
-                Core = D;
-            if (ShipAi == true)
-                Ai = A;
-            else Ai = D;
+            components.Add(Comms);
+            components.Add(Thrusters);
+            components.Add(Reactor);
+            components.Add(ShipAi);
 
-            Console.Write($"|  Long Ranged Comms".PadRight(31));
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write($"[{LRC}]".PadRight(12));
-            Console.ResetColor();
-            Console.WriteLine("|");
-
-            Console.Write($"|  Thrusters".PadRight(31));
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"[{Thrust}]".PadRight(12));
-            Console.ResetColor();
-            Console.WriteLine("|");
-
-            Console.Write($"|  Reactor Core".PadRight(31));
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"[{Core}]".PadRight(12));
-            Console.ResetColor();
-            Console.WriteLine("|");
-
-            Console.Write($"|  Ai System".PadRight(31));
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"[{Ai}]".PadRight(12));
-            Console.ResetColor();
-            Console.WriteLine("|");
-
+            for (int j = 0; j < cNames.Length; j++)
+            {
+                if (components[j] == true)
+                {                   
+                    Console.Write($"|  {cNames[j]}".PadRight(31));
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write($"[{A}]".PadRight(12));
+                    Console.ResetColor();
+                    Console.WriteLine("|");
+                }
+                else
+                {                   
+                    Console.Write($"|  {cNames[j]}".PadRight(31));
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write($"[{D}]".PadRight(12));
+                    Console.ResetColor();
+                    Console.WriteLine("|");
+                }
+                
+            }
             Console.WriteLine(Border);
-            Console.WriteLine("Press Enter To Exit");
+            Console.WriteLine("Press enter to exit");
             Console.ReadLine();
         }
         //Task 1 is for within the bridge/within the main computer
@@ -790,7 +778,7 @@ namespace AstrophobiaFirst
             int[] numbers = new int[7];
             int[] user = new int[7];
             string temp;
-            int comp, guess, correct = 0;
+            int comp, guess = 0, correct = 0;
 
             Console.WriteLine("The ship is currently on backup power, which is why some doors are shut. There is a security lock on the ship's main power, you will have to hack it open. \nThe computer will display 7 numbers for a couple seconds, then clear the screen. You will have to remember what the numbers were then type them out one at a time in the correct spot. You need to remember at least 6 to progress.\nPress enter to begin");
             Console.ReadLine();
@@ -816,9 +804,20 @@ namespace AstrophobiaFirst
             Console.WriteLine("What were the numbers?");
             for (int i = 0; i < user.Length; i++)
             {
-                Console.WriteLine($"Guess {i + 1}:");
-                temp = Console.ReadLine();
-                guess = Convert.ToInt32(temp);
+                bool validInput = false;
+                while (!validInput)    //Stops game from crashing
+                {
+                    Console.WriteLine($"Guess {i + 1}:");
+                    temp = Console.ReadLine();
+                    if (!int.TryParse(temp, out guess))
+                    {
+                        Console.WriteLine("Must enter a number");
+                    }
+                    else
+                    {
+                        validInput = true;
+                    }
+                }
                 user[i] = guess;
             }
             Console.WriteLine();
@@ -963,6 +962,7 @@ namespace AstrophobiaFirst
                     if (Answer5 == Q5)
                     {
                         Console.WriteLine("Correct!");
+
                         Correct++;
                     }
                 }
@@ -971,6 +971,7 @@ namespace AstrophobiaFirst
             } while ((Correct != Round) && (Correct < Round));
             Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
             reactorCore = reactorCore + 200;
+            Thrusters = true;
             Thread.Sleep(2000);
             Console.ReadLine();
         }
