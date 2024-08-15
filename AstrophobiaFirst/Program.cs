@@ -49,9 +49,9 @@ namespace AstrophobiaFirst
             Thread.Sleep(700);
             Console.WriteLine("\n1    Play" +
                               "\n2    Help" +
-                              "\n4    Exit\n");
+                              "\n3    Exit\n");
 
-            int userInput = ValidateUserInput(3);            
+            int userInput = GetValidUserInput(3);            
 
             switch (userInput)
             {
@@ -81,7 +81,7 @@ namespace AstrophobiaFirst
             Console.WriteLine("\nHit Enter to Go back to the Main Menu");
 
             int userInput;
-            userInput = ValidateUserInput(2);
+            userInput = GetValidUserInput(2);
 
             //Options are Commands, Purpose
             switch (userInput)
@@ -234,7 +234,9 @@ namespace AstrophobiaFirst
          * */
         public static bool CheckInventory(string item)
         {
-            return Inventory.Contains(item);
+            Console.Clear();
+            bool itemFound = Inventory.Any(Item => Item.Name == "Torch");
+            return itemFound;
         }
 
         /*
@@ -253,7 +255,7 @@ namespace AstrophobiaFirst
             Console.WriteLine(Border);
 
             int userInput;
-            userInput = ValidateUserInput(4);
+            userInput = GetValidUserInput(4);
             switch (userInput)
             {
                 case 1: //Resume
@@ -359,7 +361,7 @@ namespace AstrophobiaFirst
                                   "\n4    Inventory" +
                                   "\n5    Map\n");
 
-                userInput = ValidateUserInput(5);
+                userInput = GetValidUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -376,7 +378,7 @@ namespace AstrophobiaFirst
                         InGameMenu(ref currentRoom);
                         break;
                     case 4: //Inventory
-                        Display(Dorm);
+                        DisplayInventory(Dorm);
                         break;
                     case 5:
                          DisplayMap();
@@ -393,7 +395,7 @@ namespace AstrophobiaFirst
                                   "\n4    Inventory" +
                                   "\n5    Map\n");
                 
-                userInput = ValidateUserInput(5);
+                userInput = GetValidUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -424,7 +426,7 @@ namespace AstrophobiaFirst
                                   "\n4    Inventory" +
                                   "\n5    Map\n");
 
-                userInput = ValidateUserInput(5);
+                userInput = GetValidUserInput(5);
                 switch (userInput)
                 {
                     case 1: //Look
@@ -471,7 +473,7 @@ namespace AstrophobiaFirst
                               "\n9    Map\n");
 
             int userInput;
-            userInput = ValidateUserInput(9);
+            userInput = GetValidUserInput(9);
 
             do
             {
@@ -600,7 +602,7 @@ namespace AstrophobiaFirst
                               "\n5    Map\n");
 
             int userInput;
-            userInput = ValidateUserInput(5);
+            userInput = GetValidUserInput(5);
             switch (userInput)
             {
                 case 1: //Look
@@ -673,7 +675,7 @@ namespace AstrophobiaFirst
                                   "\n2    No\n");
 
                 int userInput;
-                userInput = ValidateUserInput(2);
+                userInput = GetValidUserInput(2);
                 switch (userInput)
                 {
                     case 1: //Yes
@@ -717,7 +719,7 @@ namespace AstrophobiaFirst
                               "\n2    Stop looking\n");
             
             int userInput;
-            userInput = ValidateUserInput(2);
+            userInput = GetValidUserInput(2);
             switch (userInput)
             {
                 case 1: //Check Computer
@@ -762,7 +764,7 @@ namespace AstrophobiaFirst
 
             int count = 0;
             int userInput;
-            userInput = ValidateUserInput(7);   
+            userInput = GetValidUserInput(7);   
             switch (userInput)
             {
                 case 1: //Check Oxygen and Reactor Core Fuel
