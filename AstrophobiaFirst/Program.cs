@@ -18,12 +18,12 @@ namespace AstrophobiaFirst
         public static bool torch = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentroom = "\0";
+        public static string currentroom = "\0", enemy = "bob";
         public static int dormRoomCount = 0;
         public static int playerHP = 100, enemyHP = 100;
         static void Main(string[] args)
         {
-            Combat();
+            Storage();
             Mainmenu();
         }
         static void Mainmenu()
@@ -361,16 +361,32 @@ namespace AstrophobiaFirst
         }
         static void Med()
         {
-            Console.WriteLine("You are in Med");
+            enemy = "Hobo";
+            Console.WriteLine("You are in Medroom");
+            Console.ReadLine();
+            Console.Beep(3000, 200);
+            Console.WriteLine("Out jumps a crazed space hobo from behind the med cabinet\n\n...\n");
+            Thread.Sleep(2000);            
+            Console.WriteLine("!!FIGHT!!");            
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
+            Console.Clear();
+            Combat();
             Hall();
         }
         static void Storage()
         {
-            Console.WriteLine("You are in Storage");
+            enemy = "Rat";
+            Console.WriteLine("You are in the Storage room");
+            Console.ReadLine();
+            Console.Beep(3000, 200);
+            Console.WriteLine("Opps! bad move going in that room\n\n...\n");
+            Thread.Sleep(2000);
+            Console.WriteLine("!!FIGHT!!");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
+            Console.Clear();
+            Combat();                        
             Hall();
         }
         static void AirLock()
@@ -985,14 +1001,26 @@ namespace AstrophobiaFirst
             // Rooms not yet in game or may not be needed - Med, Reactor, Storage, Airlock
         }
         // Combat system to be used throughout
-        public static void Combat(ref int escape)
+        public static void Combat()
         {
             while (enemyHP > 0 && playerHP > 0)
             {
-                cPrint(ref int 100);
                 Random rand = new Random();
-                int escape = rand.Next(playerHP, playerHP+15);
-                int dodge = rand.Next(1, 101), counter = rand.Next(1, 101);
+                int dodge = rand.Next(1, 101), counter = rand.Next(1, 101), escape = rand.Next(playerHP, playerHP + 15);
+                if (escape > 100)
+                    escape = 100;
+                string Border = new string('=', 44), blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
+                Console.WriteLine(Border);
+                Console.Write("+");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"  Player +{playerHP}".PadRight(31));
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{enemy} +{enemyHP} ".PadRight(11));
+                Console.ResetColor();
+                Console.WriteLine("+\n+".PadRight(45) + "+");
+                Console.WriteLine($"{blank}\n{blank}\n{blank}");
+                Console.WriteLine($"+  (1) Punch{T}+\n+  (2) Kick{T}+\n+  (3) Tackle{T}+\n+  (4) Escape {escape}% \t\t\t   +");
+                Console.WriteLine(Border);               
                 Console.Write($"Enter here: ");
                 int action = Convert.ToInt16(Console.ReadLine());
                 Console.WriteLine();               
@@ -1062,31 +1090,18 @@ namespace AstrophobiaFirst
             if (enemyHP <= 0)
             {
                 Console.WriteLine("You have slain your enemy...\n\nItem recieved - { MedRoom Key }");
+                Console.Beep(500, 100);
+                Console.Beep(1000, 100);
+                Console.Beep(1500, 100);
                 Console.ReadLine();
             }
             else if (playerHP <= 0)
             {
                 Console.WriteLine("You have died");
                 Console.ReadLine();
+                Intro();
             }
-        } 
-        public static void cPrint(ref int escape)
-        {
-            Random rand = new Random();            
-            //int escape = rand.Next(playerHP, 101);
-            string Border = new string('=', 44), blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
-            Console.WriteLine(Border);
-            Console.Write("+");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"  Player +{playerHP}".PadRight(31));
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"Enemy +{enemyHP} ".PadRight(0));
-            Console.ResetColor();
-            Console.WriteLine("+\n+".PadRight(45) + "+");
-            Console.WriteLine($"{blank}\n{blank}\n{blank}");
-            Console.WriteLine($"+  (1) Punch{T}+\n+  (2) Kick{T}+\n+  (3) Tackle{T}+\n+  (4) Escape {escape}% \t\t\t   +");
-            Console.WriteLine(Border);
-        }
+        }        
         static void GameEnd()
         {
             Console.WriteLine("You have chosen to exit the game");
