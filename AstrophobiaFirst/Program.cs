@@ -30,10 +30,10 @@ namespace AstrophobiaFirst
         public static int reactorCore = 150;
         public static string currentRoom = "Dorm";
         public static int dormRoomCount = 0;
+        public static int taskCount = 0;
 
         static void Main(string[] args)
         {
-            Task3();
             Mainmenu();
         }
         static void Mainmenu()
@@ -661,9 +661,9 @@ namespace AstrophobiaFirst
                               "\n4    Fix Engines" +
                               "\n5    Fix Oxygen" +
                               "\n6    Leave" +
-                              "\n7     Map\n");
+                              "\n7    Map\n");
 
-            int count = 0;
+            
             int userInput;
             userInput = ValidateUserInput(7);   
             switch (userInput)
@@ -678,16 +678,16 @@ namespace AstrophobiaFirst
                     break;
                 case 3: //Turn power on
                     Task1();
-                    count++;
+                    taskCount++;
                     ShipComputer();
                     break;
                 case 4: //Fix Engines
                     Task2();
-                    count++;
+                    taskCount++;
                     ShipComputer();
                     break;
                 case 5: //Fix Oxygen
-                    if (count >= 2)
+                    if (taskCount > 1)
                     {
                         Task3();
                     }
@@ -814,14 +814,16 @@ namespace AstrophobiaFirst
             }
             Thread.Sleep(2000);
             Console.Clear();
-            Console.WriteLine("What were the numbers?");
+            Console.WriteLine("What were the numbers? Type them one at a time.");
+            
             for (int i = 0; i < user.Length; i++)
             {
                 Console.WriteLine($"Guess {i + 1}:");
-                temp = Console.ReadLine();
-                guess = Convert.ToInt32(temp);
+                guess = ValidateUserInput(9);
                 user[i] = guess;
             }
+            
+
             Console.WriteLine();
             for (int i = 0; i < user.Length; i++)
             {
@@ -988,7 +990,7 @@ namespace AstrophobiaFirst
         //Task 3 is for in the oxygen room once that has been made
         public static void Task3()
         {
-            Console.WriteLine("You will be given a sequence of numbers to remember");
+            Console.WriteLine("You must enter the Oxygen Stabilizer Code.");
             string temp;
             char answer;
             int number = 1;
@@ -998,44 +1000,47 @@ namespace AstrophobiaFirst
                 temp = Console.ReadLine();
                 answer = Convert.ToChar(temp);
             } while ((answer != 'y') && (answer != 'n'));
-            Console.WriteLine("Thank you.");
+            Console.WriteLine("Readying...");
             Thread.Sleep(1000);
             Console.Clear();
 
             int count = 0, num1, num2;
             Random rand = new Random();
             num1 = rand.Next(1, 101);
-            Console.WriteLine("\nThe code is a number between 1-100, but you can't remember it.\nYou will have to guess quickly to find the answer before you black out\nYou should get at least 6 guesses.");
+            Console.WriteLine("\nThe code is a number between 1-100, but you can't remember it.\nYou will have to guess quickly to find the answer before you black out\nYou will have 8 guesses.");
             do
             {
                 Console.Write("\nPlease type a number:  ");
-                temp = Console.ReadLine();
-                num2 = Convert.ToInt32(temp);
+                num2 = ValidateUserInput(100);
                 if (num2 > num1)
                 {
-                    Console.WriteLine("The number you are looking for is smaller then this");
+                    Console.WriteLine("The number you are looking for is smaller than this");
                 }
-                if (num2 < num1)
+                else if (num2 < num1)
                 {
-                    Console.WriteLine("The number you are looking for is larger then this");
+                    Console.WriteLine("The number you are looking for is larger than this");
                 }
-                else
+                else if (num2 == num1)
                 {
                     Console.WriteLine("Correct code entered");
                 }
                 count++;
-                if (count >= 6)
+                if ((count >= 8) && (num2 !=num1))
                 {
-                    Console.WriteLine("Oxygen Levels are critical");
+                    Console.WriteLine("Oxygen Levels are critical! You have failed.");
                     Thread.Sleep(1000);
                     Lose1();
 
                 }
-                else
+                else if (num2 != num1)
                 {
                     Console.WriteLine("Try a different number");
                 }
-            } while ((num2 != num1) && (count <= 6));
+                else
+                {
+                    Console.WriteLine("Oxygen levels stabilized.");
+                }
+            } while ((num2 != num1) && (count <= 8));
 
             Console.ReadLine();
         }
