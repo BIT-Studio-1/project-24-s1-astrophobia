@@ -286,23 +286,20 @@ namespace AstrophobiaFirst
         }
         public static void randomEventBridge()
         {
-            if (bridgeEvent==false)
+            if (bridgeEvent == false)
             {
-                Random rand = new Random();
-                int num = rand.Next(3);
-                if (num == 1)
-                {
-                    Console.WriteLine("Oh no! You enter the bridge and you see a fire has started, you quickly grab the extinguisher and put it out but the oxygen supply is damaged and depleting fast you'll have to fix it quick or you're doomed!");
-                    bridgeEvent = true;
-                    Console.ReadLine();
-                    Console.Clear();
-                    bridgeEventGame();
-                }
-                else
-                {
-                    Bridge();
-                }
+
+                Console.WriteLine("Oh no! You enter the bridge and you see a fire has started, you quickly grab the extinguisher and put it out but the oxygen supply is damaged and depleting fast you'll have to fix it quick or you're doomed!");
+                bridgeEvent = true;
+                Console.ReadLine();
+                Console.Clear();
+                bridgeEventGame();
             }
+            else
+            {
+                Bridge();
+            }
+            
         }
         public static DateTime startTime;
         public static TimeSpan total;
