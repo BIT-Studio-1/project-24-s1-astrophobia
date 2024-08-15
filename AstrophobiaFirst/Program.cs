@@ -3,6 +3,7 @@ using System.ComponentModel.Design;
 using System.Reflection;
 using System.Globalization;
 using System.Threading;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace AstrophobiaFirst
@@ -28,11 +29,14 @@ namespace AstrophobiaFirst
         public static bool power = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentRoom = "Dorm";
+        public static string currentRoom = "Bridge";
         public static int dormRoomCount = 0;
+            
+        public static bool bridgeEvent = false;
 
         static void Main(string[] args)
         {
+            Hall();
             Mainmenu();
         }
         static void Mainmenu()
@@ -271,6 +275,83 @@ namespace AstrophobiaFirst
             }
         }
         //The methods below are all the rooms that will be found in this game.
+        public static void randomNumForEvent()
+        {
+            Random rand = new Random();
+            int num = rand.Next(2); //Wanted to put this random generator in the event method but it would then initiate the event every
+            if (num == 1)
+            {
+                randomEventBridge();
+            }
+        }
+        public static void randomEventBridge()
+        {
+            if (bridgeEvent == false)
+            {
+
+                Console.WriteLine("Oh no! You enter the bridge and you see a fire has started, you quickly grab the extinguisher and put it out but the oxygen supply is damaged and depleting fast you'll have to fix it quick or you're doomed!");
+                bridgeEvent = true;
+                Console.ReadLine();
+                Console.Clear();
+                bridgeEventGame();
+            }
+            else
+            {
+                Bridge();
+            }
+            
+        }
+        public static DateTime startTime;
+        public static TimeSpan total;
+        public static void bridgeEventGame()
+        {
+            Console.WriteLine("You will have 5 seconds to answer this question. If you do not answer in time the oxygen will run out and all hope will be lost!\n\nPress any key to continue");
+            Console.ReadLine() ;
+            DateTime startTime=DateTime.Now;
+            Console.WriteLine("What is the first man on the moons given/first name");
+            string temp = Console.ReadLine();
+            Console.Clear() ;
+            string ans = temp.ToUpper();
+            DateTime endTime = DateTime.Now;
+            total=endTime-startTime;
+            if(ans=="NEIL"&&total.Seconds<5.1||ans=="NIEL"&& total.Seconds < 5.1)
+            {
+            Console.WriteLine($"Seconds taken:  {total.Seconds:F1}");
+            Console.WriteLine("\nYou did it! The oxygen level is returning to normal");
+                Console.ReadLine();
+                ShipStats();
+                Console.Clear();
+            }
+            else
+            {
+                bridgeEventLoss();
+            }
+        }
+        public static void bridgeEventLoss()
+        {
+            Console.WriteLine($"Seconds taken:  {total.Seconds:F1}");
+
+            Console.WriteLine("You couldn't fix it in time, you're gasping for air but taking nothing in\n");
+            Thread.Sleep(2000);
+            Console.WriteLine("You feel yourself slipping into an eternal sleep");
+            Thread.Sleep(2000);
+            Console.Clear() ;
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
+            {
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
+            }
+        }
 
         static void Intro()
         {
@@ -302,7 +383,7 @@ namespace AstrophobiaFirst
                         break;
                     }
 
-            }
+            } 
         }
 
         //below are all the rooms
@@ -527,7 +608,7 @@ namespace AstrophobiaFirst
             currentRoom = "Bridge";
             string temp, playerChoice;
             oxygenLevel = oxygenLevel - 25;
-
+            randomNumForEvent();
             Console.WriteLine("\nYou are in the bridge, the brain of the ship where messages are received and commands are sent throughout the rest of the vessel. There seems to be power in here as some computer lights flicker and there are beeping noises all around, it seems some parts of the ship are still working. Just like the dorm room and the hallway, the thick layer of dust on all of the controls would indicate that has not been any life here for quite some time. \nAre you truly alone floating through space... \nYour options are:");
             Console.WriteLine("\n1    Look" +
                               "\n2    Ship Stats" +
