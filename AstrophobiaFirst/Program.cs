@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Globalization;
 using System.Threading;
 using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics.Metrics;
 
 
 namespace AstrophobiaFirst
@@ -29,14 +30,14 @@ namespace AstrophobiaFirst
         public static bool power = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentRoom = "Bridge";
+        public static string currentRoom = "\0", enemy = "bob";
         public static int dormRoomCount = 0;
-            
+        public static int playerHP = 100, enemyHP = 100;
         public static bool bridgeEvent = false;
 
         static void Main(string[] args)
         {
-            Hall();
+            Combat();
             Mainmenu();
         }
         static void Mainmenu()
@@ -580,18 +581,32 @@ namespace AstrophobiaFirst
         }
         static void Med()
         {
-            Console.Clear();
-            Console.WriteLine("You are in Med");
+            enemy = "Hobo";
+            Console.WriteLine("You are in Medroom");
+            Console.ReadLine();
+            Console.Beep(3000, 200);
+            Console.WriteLine("Out jumps a crazed space hobo from behind the med cabinet\n\n...\n");
+            Thread.Sleep(2000);            
+            Console.WriteLine("!!FIGHT!!");            
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
+            Console.Clear();
+            Combat();
             Hall();
         }
         static void Storage()
         {
-            Console.Clear();
-            Console.WriteLine("You are in Storage");
+            enemy = "Rat";
+            Console.WriteLine("You are in the Storage room");
+            Console.ReadLine();
+            Console.Beep(3000, 200);
+            Console.WriteLine("Opps! bad move going in that room\n\n...\n");
+            Thread.Sleep(2000);
+            Console.WriteLine("!!FIGHT!!");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
+            Console.Clear();
+            Combat();                        
             Hall();
         }
         static void AirLock()
@@ -1166,6 +1181,31 @@ namespace AstrophobiaFirst
                     break;
             }
         }
+        public static void lose3()
+        {
+            Console.WriteLine("\n\nYou thought you could escape did you ?");
+            Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("Well you failed miserably");
+            Thread.Sleep(2000);
+            Console.Clear();
+            Console.WriteLine("Achievement unlocked - Dicked by the enemy while trying to escape\n  -Failed the game embarrassingly");
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
+            {
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
+            }
+        }
         public static void Win1(ref string[] inventory)
         {
             
@@ -1204,6 +1244,108 @@ namespace AstrophobiaFirst
 
             // Rooms not yet in game or may not be needed - Med, Reactor, Storage, Airlock
         }
+        // Combat system to be used throughout
+        public static void Combat()
+        {
+            while (enemyHP > 0 && playerHP > 0)
+            {
+                Random rand = new Random();
+                int dodge = rand.Next(1, 101), counter = rand.Next(1, 101), escape = rand.Next(playerHP, playerHP + 15);
+                if (escape > 100)
+                    escape = 100;
+                string Border = new string('=', 44), blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
+                Console.WriteLine(Border);
+                Console.Write("+");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"  Player +{playerHP}".PadRight(31));
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{enemy} +{enemyHP} ".PadRight(11));
+                Console.ResetColor();
+                Console.WriteLine("+\n+".PadRight(45) + "+");
+                Console.WriteLine($"{blank}\n{blank}\n{blank}");
+                Console.WriteLine($"+  (1) Punch{T}+\n+  (2) Kick{T}+\n+  (3) Tackle{T}+\n+  (4) Escape {escape}% \t\t\t   +");
+                Console.WriteLine(Border);               
+                Console.Write($"Enter here: ");
+                int action = Convert.ToInt16(Console.ReadLine());
+                Console.WriteLine();               
+                // Enemy attack(counter) chance will be based on your attack choice
+                switch (action)
+                {
+                    case 1: if (dodge > 70) // Punch 70% chance enemy will dodge                      
+                        {
+                            enemyHP -= 15;
+                            Console.WriteLine("You punch the enemy for 15 damage\n");                            
+                            Console.Beep(900, 80);
+                        }
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 70) // Enemys next attack chance based from punch attack
+                        {
+                            playerHP -= 10;
+                            Console.WriteLine("Enemy bites you for 10 damage");
+                            Console.Beep(500, 200);                           
+                        }
+                        else Console.WriteLine("Enemy attacks but they missed");
+                        break;
+                    case 2: if (dodge > 35) // Kick 65% chance enemy will dodge                     
+                        {
+                            enemyHP -= 30;
+                            Console.WriteLine("You kick the enemy for 30 damage\n");                           
+                            Console.Beep(900, 80);
+                        }
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 35) // 65% chance they will hit you on next attack
+                        {
+                            playerHP -= 15;
+                            Console.WriteLine("Enemy slashes you for 15 damage");
+                            Console.Beep(500, 200);
+                        }
+                        else Console.WriteLine("Enemy attacks but they missed");
+                        break;
+                    case 3: if (dodge > 50) // Tackle 50% chance enemy will dodge 
+                        {
+                            enemyHP -= 35;
+                            Console.WriteLine("You tackle the enemy for 35 damage\n");                            
+                            Console.Beep(900, 80);
+                        }
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 60) // 40% chance they will hit you
+                        {
+                            playerHP -= 20;
+                            Console.WriteLine("Enemy tears at you and you take 20 damage");
+                            Console.Beep(500, 200);
+                        }
+                        else Console.WriteLine("Enemy tried to grab you but failed");
+                        break;
+                    case 4: if (escape > enemyHP)
+                            Console.WriteLine("You got away (for now) Lucky...");
+                        else
+                            lose3();
+                        break;
+                    default: Console.WriteLine("Incorrect input");
+                        break;
+                }               
+                Console.ReadLine();
+                Console.WriteLine("Press enter");
+                Console.Clear();
+            }            
+            if (enemyHP <= 0)
+            {
+                Console.WriteLine("You have slain your enemy...\n\nItem recieved - { MedRoom Key }");
+                Console.Beep(500, 100);
+                Console.Beep(1000, 100);
+                Console.Beep(1500, 100);
+                Console.ReadLine();
+            }
+            else if (playerHP <= 0)
+            {
+                Console.WriteLine("You have died");
+                Console.ReadLine();
+                Intro();
+            }
+        }        
         static void GameEnd()
         {
             Console.WriteLine("You have chosen to exit the game");
