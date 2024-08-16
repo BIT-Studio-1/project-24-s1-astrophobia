@@ -37,7 +37,6 @@ namespace AstrophobiaFirst
 
         static void Main(string[] args)
         {
-            Combat();
             Mainmenu();
         }
 
@@ -370,6 +369,7 @@ namespace AstrophobiaFirst
            * Return: void
            * */
         public static void RestartGame()
+        { 
             Console.Clear();
             Comms = false;
             Thrusters = false;
@@ -875,12 +875,12 @@ namespace AstrophobiaFirst
                 case 3: //Turn power on
 
                     MemoryPuzzle();
-                    count++;
+                    taskCount++;
                     ShipComputer();
                     break;
                 case 4: //Fix Engines
                     QuizPuzzle();
-                    count++;
+                    taskCount++;
 
                     ShipComputer();
                     break;
@@ -1018,7 +1018,7 @@ namespace AstrophobiaFirst
             for (int i = 0; i < user.Length; i++)
             {
                 Console.WriteLine($"Guess {i + 1}:");
-                guess = ValidateUserInput(9);
+                guess = GetValidUserInput(9);
                 user[i] = guess;
             }
 
@@ -1233,7 +1233,7 @@ namespace AstrophobiaFirst
             do
             {
                 Console.Write("\nPlease type a number:  ");
-                num2 = ValidateUserInput(100);
+                num2 = GetValidUserInput(100);
                 if (num2 > num1)
                 {
                     Console.WriteLine("The number you are looking for is smaller than this");
