@@ -31,6 +31,7 @@ namespace AstrophobiaFirst
         public static int reactorCore = 150;
         public static string currentRoom = "\0", enemy = "bob";
         public static int dormRoomCount = 0;
+        public static int taskCount = 0;
         public static int playerHP = 100, enemyHP = 100;
         public static bool bridgeEvent = false;
 
@@ -856,7 +857,7 @@ namespace AstrophobiaFirst
                               "\n4    Fix Engines" +
                               "\n5    Fix Oxygen" +
                               "\n6    Leave" +
-                              "\n7     Map\n");
+                              "\n7    Map\n");
 
             
             int userInput;
@@ -872,6 +873,7 @@ namespace AstrophobiaFirst
                     ShipComputer();
                     break;
                 case 3: //Turn power on
+
                     MemoryPuzzle();
                     count++;
                     ShipComputer();
@@ -879,10 +881,11 @@ namespace AstrophobiaFirst
                 case 4: //Fix Engines
                     QuizPuzzle();
                     count++;
+
                     ShipComputer();
                     break;
                 case 5: //Fix Oxygen
-                    if (power && Thrusters == true)
+                    if (taskCount > 1)
                     {
                         NumberGuessPuzzle();
                     }
@@ -1009,26 +1012,16 @@ namespace AstrophobiaFirst
 
             Thread.Sleep(2000);
             Console.Clear();
-            Console.WriteLine("What were the numbers?");
 
+            Console.WriteLine("What were the numbers? Type them one at a time.");
+            
             for (int i = 0; i < user.Length; i++)
             {
-                bool validInput = false;
-                while (!validInput)    //Stops game from crashing
-                {
-                    Console.WriteLine($"Guess {i + 1}:");
-                    temp = Console.ReadLine();
-                    if (!int.TryParse(temp, out guess))
-                    {
-                        Console.WriteLine("Must enter a number");
-                    }
-                    else
-                    {
-                        validInput = true;
-                    }
-                }
+                Console.WriteLine($"Guess {i + 1}:");
+                guess = ValidateUserInput(9);
                 user[i] = guess;
             }
+
 
             Console.WriteLine();
 
@@ -1090,16 +1083,19 @@ namespace AstrophobiaFirst
          * */
         public static void QuizPuzzle()
         {
-            int Round = 3;
+            int Round = 2;
             int Correct = 0;
+            bool win = false;
             string Q1 = "V2ROCKET";
             string Q2 = "311";
             string Q3 = "SATURN";
             string Q4 = "VENUS";
             string Q5 = "1969";
+            
 
             do
             {
+                Correct = 0;
                 Console.Clear();
                 Round++;
                 if (Round > 5)
@@ -1190,15 +1186,20 @@ namespace AstrophobiaFirst
                         Correct++;
                     }
                 }
-
+                if (Correct >= Round) win = true;
+                if (win == true)
+                {
+                    Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
+                    reactorCore = reactorCore + 200;
+                    Thread.Sleep(2000);
+                    Console.ReadLine();
+                }
 
             } while ((Correct != Round) && (Correct < Round));
-            Thrusters = true;
-            Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
-            reactorCore = reactorCore + 200;
-            Thrusters = true;
-            Thread.Sleep(2000);
-            Console.ReadLine();
+                
+               
+            
+           
         }
 
         /*
@@ -1209,7 +1210,9 @@ namespace AstrophobiaFirst
          * */
         public static void NumberGuessPuzzle()
         {
-            Console.WriteLine("You will have to guess the access code");
+
+            Console.WriteLine("You must enter the Oxygen Stabilizer Code.");
+
             string temp;
             char answer;
             int number = 1;
@@ -1219,45 +1222,49 @@ namespace AstrophobiaFirst
                 temp = Console.ReadLine();
                 answer = Convert.ToChar(temp);
             } while ((answer != 'y') && (answer != 'n'));
-            Console.WriteLine("Thank you.");
+            Console.WriteLine("Readying...");
             Thread.Sleep(1000);
             Console.Clear();
 
             int count = 0, num1, num2;
             Random rand = new Random();
             num1 = rand.Next(1, 101);
-            Console.WriteLine("\nThe code is a number between 1-100, but you can't remember it.\nYou will have to guess quickly to find the answer before you black out\nYou should get at least 6 guesses.");
+            Console.WriteLine("\nThe code is a number between 1-100, but you can't remember it.\nYou will have to guess quickly to find the answer before you black out\nYou will have 8 guesses.");
             do
             {
                 Console.Write("\nPlease type a number:  ");
-                temp = Console.ReadLine();
-                num2 = Convert.ToInt32(temp);
+                num2 = ValidateUserInput(100);
                 if (num2 > num1)
                 {
-                    Console.WriteLine("The number you are looking for is smaller then this");
+                    Console.WriteLine("The number you are looking for is smaller than this");
                 }
-                if (num2 < num1)
+                else if (num2 < num1)
                 {
-                    Console.WriteLine("The number you are looking for is larger then this");
+                    Console.WriteLine("The number you are looking for is larger than this");
                 }
-                else
+                else if (num2 == num1)
                 {
                     Console.WriteLine("Correct code entered");
                 }
                 count++;
 
-                if (count >= 6)
+                if ((count >= 8) && (num2 !=num1))
+
                 {
-                    Console.WriteLine("Oxygen Levels are critical");
+                    Console.WriteLine("Oxygen Levels are critical! You have failed.");
                     Thread.Sleep(1000);
                     NoOxygenDeath();
 
                 }
-                else
+                else if (num2 != num1)
                 {
                     Console.WriteLine("Try a different number");
                 }
-            } while ((num2 != num1) && (count <= 6));
+                else
+                {
+                    Console.WriteLine("Oxygen levels stabilized.");
+                }
+            } while ((num2 != num1) && (count <= 8));
 
             Console.ReadLine();
         }
@@ -1308,25 +1315,23 @@ namespace AstrophobiaFirst
         public static void ThrusterDeath()
         {
             Console.WriteLine("\n\nYou got stuck in the thruster, there is no escape.");
-            Console.ReadLine();
-            Console.Clear();
             Console.WriteLine("You feel your body being torn apart...");
             Thread.Sleep(2000);
             Console.Clear();
             Console.WriteLine("Achievement unlocked - Blown away\n  -Failed the game gruesomely");
-            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
-            string temp = Console.ReadLine();
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? \n1. Yes \n2. No  ");
+            int temp = Convert.ToInt32(Console.ReadLine());
             switch (temp)
             {
-                case "y":
-                case "Y":
+                case 1:
                     Mainmenu();
                     break;
-                case "n":
-                case "N":
+                case 2:
                     GameEnd();
                     break;
                 default:
+                    Console.WriteLine("Invalid input.");
+                    Thread.Sleep(1000);
                     break;
             }
         }
