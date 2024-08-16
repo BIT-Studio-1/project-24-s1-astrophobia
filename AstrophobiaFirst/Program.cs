@@ -3,6 +3,8 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics.Metrics;
 
 
 namespace AstrophobiaFirst
@@ -27,11 +29,14 @@ namespace AstrophobiaFirst
         public static bool power = false;
         public static int oxygenLevel = 999;
         public static int reactorCore = 150;
-        public static string currentRoom = "Dorm";
+        public static string currentRoom = "\0", enemy = "bob";
         public static int dormRoomCount = 0;
+        public static int playerHP = 100, enemyHP = 100;
+        public static bool bridgeEvent = false;
 
         static void Main(string[] args)
         {
+            Combat();
             Mainmenu();
         }
 
@@ -277,16 +282,93 @@ namespace AstrophobiaFirst
                     break;
             }
         }
+        //The methods below are all the rooms that will be found in this game.
+        public static void randomNumForEvent()
+        {
+            Random rand = new Random();
+            int num = rand.Next(2); //Wanted to put this random generator in the event method but it would then initiate the event every
+            if (num == 1)
+            {
+                randomEventBridge();
+            }
+        }
+        public static void randomEventBridge()
+        {
+            if (bridgeEvent == false)
+            {
+
+                Console.WriteLine("Oh no! You enter the bridge and you see a fire has started, you quickly grab the extinguisher and put it out but the oxygen supply is damaged and depleting fast you'll have to fix it quick or you're doomed!");
+                bridgeEvent = true;
+                Console.ReadLine();
+                Console.Clear();
+                bridgeEventGame();
+            }
+            else
+            {
+                Bridge();
+            }
+            
+        }
+        public static DateTime startTime;
+        public static TimeSpan total;
+        public static void bridgeEventGame()
+        {
+            Console.WriteLine("You will have 5 seconds to answer this question. If you do not answer in time the oxygen will run out and all hope will be lost!\n\nPress any key to continue");
+            Console.ReadLine() ;
+            DateTime startTime=DateTime.Now;
+            Console.WriteLine("What is the first man on the moons given/first name");
+            string temp = Console.ReadLine();
+            Console.Clear() ;
+            string ans = temp.ToUpper();
+            DateTime endTime = DateTime.Now;
+            total=endTime-startTime;
+            if(ans=="NEIL"&&total.Seconds<5.1||ans=="NIEL"&& total.Seconds < 5.1)
+            {
+            Console.WriteLine($"Seconds taken:  {total.Seconds:F1}");
+            Console.WriteLine("\nYou did it! The oxygen level is returning to normal");
+                Console.ReadLine();
+                ShipStats();
+                Console.Clear();
+            }
+            else
+            {
+                bridgeEventLoss();
+            }
+        }
+        public static void bridgeEventLoss()
+        {
+            Console.WriteLine($"Seconds taken:  {total.Seconds:F1}");
+
+            Console.WriteLine("You couldn't fix it in time, you're gasping for air but taking nothing in\n");
+            Thread.Sleep(2000);
+            Console.WriteLine("You feel yourself slipping into an eternal sleep");
+            Thread.Sleep(2000);
+            Console.Clear() ;
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
+            {
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
+            }
+        }
 
         /*
-         * Resets all global variables
-         * 
-         * TODO: Check no ones missed something
-         * 
-         * Return: void
-         * */
+           * Resets all global variables
+           * 
+           * TODO: Check no ones missed something
+           * 
+           * Return: void
+           * */
         public static void RestartGame()
-        {
             Console.Clear();
             Comms = false;
             Thrusters = false;
@@ -335,7 +417,7 @@ namespace AstrophobiaFirst
                         break;
                     }
 
-            }
+            } 
         }
 
         /*
@@ -547,10 +629,17 @@ namespace AstrophobiaFirst
          * */
         public static void Med()
         {
-            Console.Clear();
-            Console.WriteLine("You are in Med");
+            enemy = "Hobo";
+            Console.WriteLine("You are in Medroom");
+            Console.ReadLine();
+            Console.Beep(3000, 200);
+            Console.WriteLine("Out jumps a crazed space hobo from behind the med cabinet\n\n...\n");
+            Thread.Sleep(2000);            
+            Console.WriteLine("!!FIGHT!!");            
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
+            Console.Clear();
+            Combat();
             Hall();
         }
 
@@ -561,10 +650,17 @@ namespace AstrophobiaFirst
          * */
         public static void Storage()
         {
-            Console.Clear();
-            Console.WriteLine("You are in Storage");
+            enemy = "Rat";
+            Console.WriteLine("You are in the Storage room");
+            Console.ReadLine();
+            Console.Beep(3000, 200);
+            Console.WriteLine("Opps! bad move going in that room\n\n...\n");
+            Thread.Sleep(2000);
+            Console.WriteLine("!!FIGHT!!");
             oxygenLevel = oxygenLevel - 25;
             Console.ReadLine();
+            Console.Clear();
+            Combat();                        
             Hall();
         }
 
@@ -593,7 +689,7 @@ namespace AstrophobiaFirst
             currentRoom = "Bridge";
             string temp, playerChoice;
             oxygenLevel = oxygenLevel - 25;
-
+            randomNumForEvent();
             Console.WriteLine("\nYou are in the bridge, the brain of the ship where messages are received and commands are sent throughout the rest of the vessel. There seems to be power in here as some computer lights flicker and there are beeping noises all around, it seems some parts of the ship are still working. Just like the dorm room and the hallway, the thick layer of dust on all of the controls would indicate that has not been any life here for quite some time. \nAre you truly alone floating through space... \nYour options are:");
             Console.WriteLine("\n1    Look" +
                               "\n2    Ship Stats" +
@@ -762,7 +858,7 @@ namespace AstrophobiaFirst
                               "\n6    Leave" +
                               "\n7     Map\n");
 
-            int count = 0;
+            
             int userInput;
             userInput = GetValidUserInput(7);   
             switch (userInput)
@@ -786,7 +882,7 @@ namespace AstrophobiaFirst
                     ShipComputer();
                     break;
                 case 5: //Fix Oxygen
-                    if (count >= 2)
+                    if (power && Thrusters == true)
                     {
                         NumberGuessPuzzle();
                     }
@@ -1097,6 +1193,7 @@ namespace AstrophobiaFirst
 
 
             } while ((Correct != Round) && (Correct < Round));
+            Thrusters = true;
             Console.WriteLine($"You got {Correct} of 5 answers correct and have successfully fixed the ships thruster =)\nThe ship has gained 200 energy");
             reactorCore = reactorCore + 200;
             Thrusters = true;
@@ -1233,13 +1330,37 @@ namespace AstrophobiaFirst
                     break;
             }
         }
-
-        /*
-         * Wins the game
-         * 
-         * Return: void
-         * */
-        public static void Win1(ref string[] inventory)
+        public static void lose3()
+        {
+            Console.WriteLine("\n\nYou thought you could escape did you ?");
+            Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("Well you failed miserably");
+            Thread.Sleep(2000);
+            Console.Clear();
+            Console.WriteLine("Achievement unlocked - Dicked by the enemy while trying to escape\n  -Failed the game embarrassingly");
+            Console.Write("Unfortunatly you have failed this mission. Would you like to return to main menu? (y or n):  ");
+            string temp = Console.ReadLine();
+            switch (temp)
+            {
+                case "y":
+                case "Y":
+                    Mainmenu();
+                    break;
+                case "n":
+                case "N":
+                    GameEnd();
+                    break;
+                default:
+                    break;
+            }
+        }
+    /*
+        * Wins the game
+        * 
+        * Return: void
+        * */
+    public static void Win1(ref string[] inventory)
         {
             
             Console.Clear();
@@ -1277,14 +1398,115 @@ namespace AstrophobiaFirst
 
             // Rooms not yet in game or may not be needed - Med, Reactor, Storage, Airlock
         }
-
-        /*
+        // Combat system to be used throughout
+        public static void Combat()
+        {
+            while (enemyHP > 0 && playerHP > 0)
+            {
+                Random rand = new Random();
+                int dodge = rand.Next(1, 101), counter = rand.Next(1, 101), escape = rand.Next(playerHP, playerHP + 15);
+                if (escape > 100)
+                    escape = 100;
+                string Border = new string('=', 44), blank = "+".PadRight(43) + "+", T = "\t\t\t\t   ";
+                Console.WriteLine(Border);
+                Console.Write("+");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"  Player +{playerHP}".PadRight(31));
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{enemy} +{enemyHP} ".PadRight(11));
+                Console.ResetColor();
+                Console.WriteLine("+\n+".PadRight(45) + "+");
+                Console.WriteLine($"{blank}\n{blank}\n{blank}");
+                Console.WriteLine($"+  (1) Punch{T}+\n+  (2) Kick{T}+\n+  (3) Tackle{T}+\n+  (4) Escape {escape}% \t\t\t   +");
+                Console.WriteLine(Border);               
+                Console.Write($"Enter here: ");
+                int action = Convert.ToInt16(Console.ReadLine());
+                Console.WriteLine();               
+                // Enemy attack(counter) chance will be based on your attack choice
+                switch (action)
+                {
+                    case 1: if (dodge > 70) // Punch 70% chance enemy will dodge                      
+                        {
+                            enemyHP -= 15;
+                            Console.WriteLine("You punch the enemy for 15 damage\n");                            
+                            Console.Beep(900, 80);
+                        }
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 70) // Enemys next attack chance based from punch attack
+                        {
+                            playerHP -= 10;
+                            Console.WriteLine("Enemy bites you for 10 damage");
+                            Console.Beep(500, 200);                           
+                        }
+                        else Console.WriteLine("Enemy attacks but they missed");
+                        break;
+                    case 2: if (dodge > 35) // Kick 65% chance enemy will dodge                     
+                        {
+                            enemyHP -= 30;
+                            Console.WriteLine("You kick the enemy for 30 damage\n");                           
+                            Console.Beep(900, 80);
+                        }
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 35) // 65% chance they will hit you on next attack
+                        {
+                            playerHP -= 15;
+                            Console.WriteLine("Enemy slashes you for 15 damage");
+                            Console.Beep(500, 200);
+                        }
+                        else Console.WriteLine("Enemy attacks but they missed");
+                        break;
+                    case 3: if (dodge > 50) // Tackle 50% chance enemy will dodge 
+                        {
+                            enemyHP -= 35;
+                            Console.WriteLine("You tackle the enemy for 35 damage\n");                            
+                            Console.Beep(900, 80);
+                        }
+                        else Console.WriteLine("You missed\n");
+                        Thread.Sleep(1000);
+                        if (counter > 60) // 40% chance they will hit you
+                        {
+                            playerHP -= 20;
+                            Console.WriteLine("Enemy tears at you and you take 20 damage");
+                            Console.Beep(500, 200);
+                        }
+                        else Console.WriteLine("Enemy tried to grab you but failed");
+                        break;
+                    case 4: if (escape > enemyHP)
+                            Console.WriteLine("You got away (for now) Lucky...");
+                        else
+                            lose3();
+                        break;
+                    default: Console.WriteLine("Incorrect input");
+                        break;
+                }               
+                Console.ReadLine();
+                Console.WriteLine("Press enter");
+                Console.Clear();
+            }            
+            if (enemyHP <= 0)
+            {
+                Console.WriteLine("You have slain your enemy...\n\nItem recieved - { MedRoom Key }");
+                Console.Beep(500, 100);
+                Console.Beep(1000, 100);
+                Console.Beep(1500, 100);
+                Console.ReadLine();
+            }
+            else if (playerHP <= 0)
+            {
+                Console.WriteLine("You have died");
+                Console.ReadLine();
+                Intro();
+            }
+    }
+    /*
          * Exits out of the game
          * 
          * Return: void
          * */
-        public static void GameEnd()
-        {
+    public static void GameEnd()
+    {
             Console.WriteLine("You have chosen to exit the game");
             Thread.Sleep(1000);
             Console.WriteLine("Thank you for playing, Goodbye!");
